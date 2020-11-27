@@ -2,6 +2,7 @@
 #include <vector>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
 using Position = sf::Vector2f;
@@ -13,21 +14,24 @@ struct Size {
 
 class Grid {
   public:
-    Grid(const Position& position, const Size& size, uint32_t cell_size)
+    Grid(const Position& position, const Size& size, uint32_t cell_size, sf::Color color)
         : position_ { position }
         , size_ { size }
         , cell_size_ { cell_size }
     {
-        for (std::uint32_t i { 0 }; i <= size.width; ++i)
+        for (std::uint32_t i { 0 }; i <= size.width; ++i) {
             lines_.push_back({ 
-                sf::Vertex(sf::Vector2f(position.x + i * cell_size, position.y)), 
-                sf::Vertex(sf::Vector2f(position.x + i * cell_size, position.y + size.height * cell_size))
+                sf::Vertex(sf::Vector2f(position.x + i * cell_size, position.y), color), 
+                sf::Vertex(sf::Vector2f(position.x + i * cell_size, position.y + size.height * cell_size), color)
             });
-        for (std::uint32_t i { 0 }; i <= size.height; ++i)
+        }
+
+        for (std::uint32_t i { 0 }; i <= size.height; ++i) {
             lines_.push_back({
-                sf::Vertex(sf::Vector2f(position.x,                          position.y + i * cell_size)),
-                sf::Vertex(sf::Vector2f(position.x + size.width * cell_size, position.y + i * cell_size))
+                sf::Vertex(sf::Vector2f(position.x, position.y + i * cell_size), color),
+                sf::Vertex(sf::Vector2f(position.x + size.width * cell_size, position.y + i * cell_size), color)
             });
+        }
     }
 
     void draw(sf::RenderWindow* window) {
@@ -47,20 +51,70 @@ class Grid {
     std::vector<std::array<sf::Vertex, 2>> lines_;
 };
 
-int main()
-{
+class Points {
+  public:
+    Points(const Position& position, const Size& count, std::uint32_t distance, std::uint32_t radius, sf::Color color) {
+        points_.resize(count.width * count.height);
+        
+        std::size_t k { 0 };
+        for (std::uint32_t i { 0 }; i < count.width; ++i) {
+            for (std::uint32_t j { 0 }; j < count.height; ++j) {
+                points_.at(k).setPosition(position.x + i * distance - radius, position.y + j * distance - radius);
+                ++k;
+            }
+        }
+
+        for (auto& point : points_) { point.setRadius(radius); }
+
+        for (auto& point : points_) { point.setPointCount(150); }
+
+        for (auto& point : points_) { point.setFillColor(color); }
+    }
+
+    void handleEvent(const sf::RenderWindow& window, const sf::Event& event, const sf::Color color) {
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i pixel { sf::Mouse::getPosition(window) };
+                sf::Vector2f coords { window.mapPixelToCoords(pixel) };
+                for (auto& point : points_) {
+                    if (point.getGlobalBounds().contains(coords)) {
+                        point.setFillColor(color);
+                    }
+                }
+            }
+        }
+    }
+
+    void draw(sf::RenderWindow* window) {
+        for (const auto& point : points_) {
+            if (point.getFillColor() != sf::Color::White) {
+                window->draw(point);
+            }
+        }
+    }
+
+  private:
+    std::vector<sf::CircleShape> points_;
+};
+
+int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Points");
 
-    Grid grid { Position { 150, 50 }, Size { 20, 20 }, 20 };
-
+    Grid grid { Position { 150, 50 }, Size { 20, 20 }, 25, sf::Color::Black };
+    Points points { Position { 150, 50 }, Size { 21, 21 }, 25, 4, sf::Color::White };
+    
     while (window.isOpen()) {
-        sf::Event event;
+        sf::Event event;    
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            
+            points.handleEvent(window, event, sf::Color::Red);    
         }
-        window.clear();
+        window.clear(sf::Color::White);
         grid.draw(&window);
+        points.draw(&window);
         window.display();
     }
     return 0;
