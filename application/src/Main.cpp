@@ -14,11 +14,7 @@ struct Size {
 
 class Grid {
   public:
-    Grid(const Position& position, const Size& size, uint32_t cell_size, sf::Color color)
-        : position_ { position }
-        , size_ { size }
-        , cell_size_ { cell_size }
-    {
+    Grid(const Position& position, const Size& size, uint32_t cell_size, sf::Color color) {
         for (std::uint32_t i { 0 }; i <= size.width; ++i) {
             lines_.push_back({ 
                 sf::Vertex(sf::Vector2f(position.x + i * cell_size, position.y), color), 
@@ -40,14 +36,7 @@ class Grid {
         }
     }
 
-    const Position& getPosition() { return position_; }
-    const Size& getSize() { return size_; }
-    const std::uint32_t getCellSize() { return cell_size_; }
-
   private:
-    Position position_;
-    Size size_;
-    std::uint32_t cell_size_;
     std::vector<std::array<sf::Vertex, 2>> lines_;
 };
 
