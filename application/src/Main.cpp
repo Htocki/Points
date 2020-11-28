@@ -86,11 +86,28 @@ class Points {
     std::vector<sf::CircleShape> points_;
 };
 
+class Player {
+  public:
+    Player(const sf::String& name, const sf::Color& color)
+        : name_ { name }
+        , color_ { color }
+    {}
+
+    const sf::Color& getColor() const { return color_; }
+    const sf::String& getName() const { return name_; }
+
+  private:
+    sf::String name_;
+    sf::Color color_;
+};
+
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Points");
 
     Grid grid { Position { 150, 50 }, Size { 20, 20 }, 25, sf::Color::Black };
     Points points { Position { 150, 50 }, Size { 21, 21 }, 25, 4, sf::Color::White };
+    Player player1 { "Player1", sf::Color::Red };
+    Player player2 { "Player2", sf::Color::Blue };
     
     while (window.isOpen()) {
         sf::Event event;    
