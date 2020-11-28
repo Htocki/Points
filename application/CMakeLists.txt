@@ -11,6 +11,8 @@ set_target_properties (${PROJECT_NAME}
     set (CMAKE_CXX_STANDARD_REQUIRED ON)
 )
 
+file (COPY "${CMAKE_SOURCE_DIR}/media" DESTINATION "${PROJECT_BINARY_DIR}")
+
 target_link_libraries (${PROJECT_NAME} 
   PUBLIC
     sfml-graphics
