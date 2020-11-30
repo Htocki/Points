@@ -79,6 +79,15 @@ class Points {
         return false;
     }
 
+    const sf::CircleShape& getPoint(const sf::Vector2f& position) {
+        for (auto& point : points_) {
+            if (point.getGlobalBounds().contains(position)) {
+                return point;
+            }
+        }
+        throw std::logic_error { "Point not found." };
+    }
+
     void draw(sf::RenderWindow* window) {
         for (const auto& point : points_) {
             if (point.getFillColor() != sf::Color::White) {
@@ -167,6 +176,10 @@ int main() {
         Player player1 { "first", sf::Color::Red, true };
         Player player2 { "second", sf::Color::Blue, false };
 
+        sf::CircleShape focus;
+        focus.setRadius(6);
+        focus.setOutlineThickness(2);
+
         while (window.isOpen()) {
             sf::Event event;    
             while (window.pollEvent(event)) {
@@ -179,12 +192,22 @@ int main() {
                         if (player1.isActive() && !player2.isActive()) {
                             if (points.isContainsNotFilledPoint(coords)) {
                                 points.setPointFillColor(coords, player1.getColor());
+                                const auto& point { points.getPoint(coords) };
+                                focus.setPosition(
+                                    point.getPosition().x + point.getRadius() - focus.getRadius(),
+                                    point.getPosition().y + point.getRadius() - focus.getRadius());
+                                focus.setOutlineColor(player1.getColor());
                                 player1.deactivate();
                                 player2.activate();
                             }
                         } else {
                             if (points.isContainsNotFilledPoint(coords)) {
                                 points.setPointFillColor(coords, player2.getColor());
+                                const auto& point { points.getPoint(coords) };
+                                focus.setPosition(
+                                    point.getPosition().x + point.getRadius() - focus.getRadius(),
+                                    point.getPosition().y + point.getRadius() - focus.getRadius());
+                                focus.setOutlineColor(player2.getColor());
                                 player1.activate();
                                 player2.deactivate();
                             }
@@ -194,6 +217,7 @@ int main() {
             }
             window.clear(sf::Color::White);
             grid.draw(&window);
+            window.draw(focus);
             points.draw(&window);
             window.display();
         }
