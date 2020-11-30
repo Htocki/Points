@@ -167,7 +167,10 @@ class Label {
 
 int main() {
     try {
-        sf::RenderWindow window(sf::VideoMode(800, 600), "POINTS");
+        sf::ContextSettings settings;
+	    settings.antialiasingLevel = 8;
+
+        sf::RenderWindow window(sf::VideoMode(800, 600), "POINTS", sf::Style::Default, settings);
         window.setFramerateLimit(70);
 
         Grid grid { sf::Vector2f { 150, 50 }, Size { 20, 20 }, 25, sf::Color::Black };
