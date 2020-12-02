@@ -79,6 +79,15 @@ class Points {
         return false;
     }
 
+    bool isContainsPointWithColor(const sf::Vector2f& position, const sf::Color& color) {
+        for (auto& point : points_) {
+            if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     const sf::CircleShape& getPoint(const sf::Vector2f& position) {
         for (auto& point : points_) {
             if (point.getGlobalBounds().contains(position)) {
@@ -165,6 +174,76 @@ class Label {
     sf::Text text_;
 };
 
+class ClosedBoundedPolyline {
+  public:
+    ClosedBoundedPolyline(unsigned int bounding_radius) {
+        bounding_area_.setRadius(bounding_radius);        
+    }
+
+    void addPointPosition(const sf::Vector2f& position, const sf::Color& color) {
+        if (positions_.size() < 1) {
+            positions_.push_back(position);
+            bounding_area_.setPosition(position.x - bounding_area_.getRadius(), position.y - bounding_area_.getRadius());
+        } else {
+            if (bounding_area_.getGlobalBounds().contains(position)) {
+                positions_.push_back(position);
+                bounding_area_.setPosition(position.x - bounding_area_.getRadius(), position.y - bounding_area_.getRadius());
+                lines_.push_back({ 
+                    sf::Vertex(sf::Vector2f(positions_.at(positions_.size() - 2)), color),
+                    sf::Vertex(sf::Vector2f(positions_.at(positions_.size() - 1)), color)
+                });
+            } else {
+                positions_.clear();
+                lines_.clear();
+            } 
+        }
+    }
+
+    void draw(sf::RenderWindow* window) {
+        for (const auto& line : lines_) {
+            window->draw(line.data(), 2, sf::Lines);
+        }
+    }
+
+    bool isClosed() const { 
+        if (positions_.size() > 2) {
+            if (positions_.at(0) == positions_.at(positions_.size() - 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    unsigned int getPointCount() const { return positions_.size(); }
+    
+    const sf::Vector2f& at(unsigned int index) const {
+        return positions_.at(index);
+    }
+
+    void clear() {
+        lines_.clear();
+        positions_.clear();
+    }
+
+  private:
+    std::vector<std::array<sf::Vertex, 2>> lines_;
+    std::vector<sf::Vector2f> positions_;
+    sf::CircleShape bounding_area_;
+};
+
+sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color) {
+    sf::Color fill_color { color.r, color.g, color.b, 110 };
+    sf::ConvexShape convex;
+    convex.setOutlineColor(color);
+    convex.setOutlineThickness(3);
+    convex.setFillColor(fill_color);
+    convex.setPointCount(polyline.getPointCount());
+    for (unsigned int i { 0 }; i < polyline.getPointCount(); ++i) {
+        convex.setPoint(i, polyline.at(i));
+    }
+    return convex;
+}
+
 int main() {
     try {
         sf::ContextSettings settings;
@@ -183,8 +262,12 @@ int main() {
         focus.setRadius(6);
         focus.setOutlineThickness(2);
 
+        ClosedBoundedPolyline polyline { 37 };
+        std::vector<sf::ConvexShape> convexes;
+
         while (window.isOpen()) {
-            sf::Event event;    
+            sf::Event event;
+            
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed) { window.close(); }
                 
@@ -216,12 +299,48 @@ int main() {
                             }
                         }
                     }
-                }    
+                }
+
+                if (event.type == sf::Event::MouseButtonPressed) {
+                    if (event.mouseButton.button == sf::Mouse::Right) {
+                        sf::Vector2f coords { window.mapPixelToCoords(sf::Mouse::getPosition(window)) };
+                        
+                        if (player1.isActive() && !player2.isActive()) {
+                            if (!points.isContainsNotFilledPoint(coords)) {
+                                const auto& point { points.getPoint(coords) };
+                                polyline.addPointPosition(
+                                    { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
+                                    player1.getColor()
+                                );
+                                if (polyline.isClosed()) {
+                                    convexes.push_back(MakeConvex(polyline, player1.getColor()));
+                                    polyline.clear();
+                                }
+                            }
+                        } else {
+                            if (!points.isContainsNotFilledPoint(coords)) {
+                                const auto& point { points.getPoint(coords) };
+                                polyline.addPointPosition(
+                                    { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
+                                    player2.getColor()
+                                );
+                                if (polyline.isClosed()) {
+                                    convexes.push_back(MakeConvex(polyline, player2.getColor()));
+                                    polyline.clear();
+                                }
+                            }
+                        }
+                    }
+                }
             }
             window.clear(sf::Color::White);
             grid.draw(&window);
             window.draw(focus);
             points.draw(&window);
+            for (const auto& convex : convexes) {
+                window.draw(convex);
+            }
+            polyline.draw(&window);
             window.display();
         }
     } catch (const std::exception& e) {
