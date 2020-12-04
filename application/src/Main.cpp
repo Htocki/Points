@@ -244,108 +244,129 @@ sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Colo
     return convex;
 }
 
+class Application {
+  public:
+    Application()
+       : window_ { sf::VideoMode(800, 600), "POINTS", sf::Style::Default, sf::ContextSettings { 0, 0, 8 } }
+       , grid_ { sf::Vector2f { 150, 50 }, Size { 20, 20 }, 25, sf::Color::Black }
+       , points_ { sf::Vector2f { 150, 50 }, Size { 21, 21 }, 25, 4, sf::Color::White }
+       , player1_ { "first", sf::Color::Red, true }
+       , player2_ { "second", sf::Color::Blue, false }
+       , polyline_ { 37 }
+    {
+        window_.setFramerateLimit(70);
+        focus_.setRadius(6);
+        focus_.setOutlineThickness(2);
+    }
+
+    void run() {
+        while (window_.isOpen()) {
+            sf::Event event;
+            while (window_.pollEvent(event)) {
+                handleEvent(event);
+                draw();
+            }
+        }
+    }
+
+  private:
+    void handleEvent(const sf::Event& event) {
+        if (event.type == sf::Event::Closed) {
+            window_.close();
+        }
+    
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+
+                if (player1_.isActive() && !player2_.isActive()) {
+                    if (points_.isContainsNotFilledPoint(coords)) {
+                        points_.setPointFillColor(coords, player1_.getColor());
+                        const auto& point { points_.getPoint(coords) };
+                        focus_.setPosition(
+                            point.getPosition().x + point.getRadius() - focus_.getRadius(),
+                            point.getPosition().y + point.getRadius() - focus_.getRadius());
+                        focus_.setOutlineColor(player1_.getColor());
+                        player1_.deactivate();
+                        player2_.activate();
+                    }
+                } else {
+                    if (points_.isContainsNotFilledPoint(coords)) {
+                        points_.setPointFillColor(coords, player2_.getColor());
+                        const auto& point { points_.getPoint(coords) };
+                        focus_.setPosition(
+                        point.getPosition().x + point.getRadius() - focus_.getRadius(),
+                            point.getPosition().y + point.getRadius() - focus_.getRadius());
+                        focus_.setOutlineColor(player2_.getColor());
+                        player1_.activate();
+                        player2_.deactivate();
+                    }
+                }
+            }
+        }
+
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Right) {
+                sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+                      
+                if (player1_.isActive() && !player2_.isActive()) {
+                    if (!points_.isContainsNotFilledPoint(coords)) {
+                        const auto& point { points_.getPoint(coords) };
+                        polyline_.addPointPosition(
+                            { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
+                            player1_.getColor()
+                        );
+                        if (polyline_.isClosed()) {
+                            convexes_.push_back(MakeConvex(polyline_, player1_.getColor()));
+                            polyline_.clear();
+                        }
+                    }
+                } else {
+                    if (!points_.isContainsNotFilledPoint(coords)) {
+                        const auto& point { points_.getPoint(coords) };
+                        polyline_.addPointPosition(
+                            { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
+                            player2_.getColor()
+                        );
+                        if (polyline_.isClosed()) {
+                            convexes_.push_back(MakeConvex(polyline_, player2_.getColor()));
+                            polyline_.clear();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void draw() {
+        window_.clear(sf::Color::White);
+        grid_.draw(&window_);
+        window_.draw(focus_);
+        points_.draw(&window_);
+        for (const auto& convex : convexes_) {
+            window_.draw(convex);
+        }
+        polyline_.draw(&window_);
+        window_.display();
+    }
+
+    sf::RenderWindow window_;
+    Grid grid_;
+    Points points_;
+    Player player1_;
+    Player player2_;
+    sf::CircleShape focus_;
+    ClosedBoundedPolyline polyline_;
+    std::vector<sf::ConvexShape> convexes_;
+};
+
 int main() {
     try {
-        sf::ContextSettings settings;
-	    settings.antialiasingLevel = 8;
-
-        sf::RenderWindow window(sf::VideoMode(800, 600), "POINTS", sf::Style::Default, settings);
-        window.setFramerateLimit(70);
-
-        Grid grid { sf::Vector2f { 150, 50 }, Size { 20, 20 }, 25, sf::Color::Black };
-        Points points { sf::Vector2f { 150, 50 }, Size { 21, 21 }, 25, 4, sf::Color::White };
-    
-        Player player1 { "first", sf::Color::Red, true };
-        Player player2 { "second", sf::Color::Blue, false };
-
-        sf::CircleShape focus;
-        focus.setRadius(6);
-        focus.setOutlineThickness(2);
-
-        ClosedBoundedPolyline polyline { 37 };
-        std::vector<sf::ConvexShape> convexes;
-
-        while (window.isOpen()) {
-            sf::Event event;
-            
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) { window.close(); }
-                
-                if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Left) {
-                        sf::Vector2f coords { window.mapPixelToCoords(sf::Mouse::getPosition(window)) };
-
-                        if (player1.isActive() && !player2.isActive()) {
-                            if (points.isContainsNotFilledPoint(coords)) {
-                                points.setPointFillColor(coords, player1.getColor());
-                                const auto& point { points.getPoint(coords) };
-                                focus.setPosition(
-                                    point.getPosition().x + point.getRadius() - focus.getRadius(),
-                                    point.getPosition().y + point.getRadius() - focus.getRadius());
-                                focus.setOutlineColor(player1.getColor());
-                                player1.deactivate();
-                                player2.activate();
-                            }
-                        } else {
-                            if (points.isContainsNotFilledPoint(coords)) {
-                                points.setPointFillColor(coords, player2.getColor());
-                                const auto& point { points.getPoint(coords) };
-                                focus.setPosition(
-                                    point.getPosition().x + point.getRadius() - focus.getRadius(),
-                                    point.getPosition().y + point.getRadius() - focus.getRadius());
-                                focus.setOutlineColor(player2.getColor());
-                                player1.activate();
-                                player2.deactivate();
-                            }
-                        }
-                    }
-                }
-
-                if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Right) {
-                        sf::Vector2f coords { window.mapPixelToCoords(sf::Mouse::getPosition(window)) };
-                        
-                        if (player1.isActive() && !player2.isActive()) {
-                            if (!points.isContainsNotFilledPoint(coords)) {
-                                const auto& point { points.getPoint(coords) };
-                                polyline.addPointPosition(
-                                    { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
-                                    player1.getColor()
-                                );
-                                if (polyline.isClosed()) {
-                                    convexes.push_back(MakeConvex(polyline, player1.getColor()));
-                                    polyline.clear();
-                                }
-                            }
-                        } else {
-                            if (!points.isContainsNotFilledPoint(coords)) {
-                                const auto& point { points.getPoint(coords) };
-                                polyline.addPointPosition(
-                                    { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
-                                    player2.getColor()
-                                );
-                                if (polyline.isClosed()) {
-                                    convexes.push_back(MakeConvex(polyline, player2.getColor()));
-                                    polyline.clear();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            window.clear(sf::Color::White);
-            grid.draw(&window);
-            window.draw(focus);
-            points.draw(&window);
-            for (const auto& convex : convexes) {
-                window.draw(convex);
-            }
-            polyline.draw(&window);
-            window.display();
-        }
+        Application application;
+        application.run();
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
     }
-    
+
     return 0;
 }
