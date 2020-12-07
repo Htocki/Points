@@ -88,6 +88,15 @@ class Points {
         return false;
     }
 
+    bool isPointFounded(const sf::Vector2f& position, const sf::Color& color = sf::Color::White) {
+        for (auto& point : points_) {
+            if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
+                return true;
+            }
+        }
+        return false;
+    } 
+
     const sf::CircleShape& getPoint(const sf::Vector2f& position) {
         for (auto& point : points_) {
             if (point.getGlobalBounds().contains(position)) {
@@ -214,6 +223,11 @@ class ClosedBoundedPolyline {
         return false;
     }
 
+    bool isEmpty() const {
+        if (positions_.size() > 0) { return false; }
+        return true;
+    }
+
     unsigned int getPointCount() const { return positions_.size(); }
     
     const sf::Vector2f& at(unsigned int index) const {
@@ -289,6 +303,7 @@ class Application {
                         focus_.setOutlineColor(player1_.getColor());
                         player1_.deactivate();
                         player2_.activate();
+                        polyline_.clear();
                     }
                 } else {
                     if (points_.isContainsNotFilledPoint(coords)) {
@@ -300,6 +315,7 @@ class Application {
                         focus_.setOutlineColor(player2_.getColor());
                         player1_.activate();
                         player2_.deactivate();
+                        polyline_.clear();
                     }
                 }
             }
@@ -310,7 +326,7 @@ class Application {
                 sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
                       
                 if (player1_.isActive() && !player2_.isActive()) {
-                    if (!points_.isContainsNotFilledPoint(coords)) {
+                    if (points_.isPointFounded(coords, player1_.getColor())) {
                         const auto& point { points_.getPoint(coords) };
                         polyline_.addPointPosition(
                             { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
@@ -320,9 +336,11 @@ class Application {
                             convexes_.push_back(MakeConvex(polyline_, player1_.getColor()));
                             polyline_.clear();
                         }
+                    } else {
+                        polyline_.clear();
                     }
                 } else {
-                    if (!points_.isContainsNotFilledPoint(coords)) {
+                    if (points_.isPointFounded(coords, player2_.getColor())) {
                         const auto& point { points_.getPoint(coords) };
                         polyline_.addPointPosition(
                             { point.getPosition().x + point.getRadius(), point.getPosition().y + point.getRadius() },
@@ -332,6 +350,8 @@ class Application {
                             convexes_.push_back(MakeConvex(polyline_, player2_.getColor()));
                             polyline_.clear();
                         }
+                    } else {
+                        polyline_.clear();
                     }
                 }
             }
