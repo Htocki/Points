@@ -30,7 +30,7 @@ class Grid {
         }
     }
 
-    void draw(sf::RenderWindow* window) {
+    void draw(sf::RenderWindow* window) const {
         for (const auto& line : lines_) {
             window->draw(line.data(), 2, sf::Lines);
         }
@@ -70,7 +70,7 @@ class Points {
         }
     }
 
-    bool isContainsNotFilledPoint(const sf::Vector2f& position) {
+    bool isContainsNotFilledPoint(const sf::Vector2f& position) const {
         for (auto& point : points_) {
             if (point.getGlobalBounds().contains(position) && point.getFillColor() == sf::Color::White) {
                 return true;
@@ -79,7 +79,7 @@ class Points {
         return false;
     }
 
-    bool isContainsPointWithColor(const sf::Vector2f& position, const sf::Color& color) {
+    bool isContainsPointWithColor(const sf::Vector2f& position, const sf::Color& color) const {
         for (auto& point : points_) {
             if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
                 return true;
@@ -88,7 +88,7 @@ class Points {
         return false;
     }
 
-    bool isPointFounded(const sf::Vector2f& position, const sf::Color& color = sf::Color::White) {
+    bool isPointFounded(const sf::Vector2f& position, const sf::Color& color = sf::Color::White) const {
         for (auto& point : points_) {
             if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
                 return true;
@@ -97,7 +97,7 @@ class Points {
         return false;
     } 
 
-    const sf::CircleShape& getPoint(const sf::Vector2f& position) {
+    const sf::CircleShape& getPoint(const sf::Vector2f& position) const {
         for (auto& point : points_) {
             if (point.getGlobalBounds().contains(position)) {
                 return point;
@@ -106,7 +106,7 @@ class Points {
         throw std::logic_error { "Point not found." };
     }
 
-    void draw(sf::RenderWindow* window) {
+    void draw(sf::RenderWindow* window) const {
         for (const auto& point : points_) {
             if (point.getFillColor() != sf::Color::White) {
                 window->draw(point);
@@ -175,7 +175,7 @@ class Label {
         text_.setStyle(style);
     }
 
-    void draw(sf::RenderWindow* window) {
+    void draw(sf::RenderWindow* window) const {
         window->draw(text_);
     }
 
@@ -208,7 +208,7 @@ class ClosedBoundedPolyline {
         }
     }
 
-    void draw(sf::RenderWindow* window) {
+    void draw(sf::RenderWindow* window) const {
         for (const auto& line : lines_) {
             window->draw(line.data(), 2, sf::Lines);
         }
