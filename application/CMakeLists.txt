@@ -15,7 +15,15 @@ file (COPY "${CMAKE_SOURCE_DIR}/media" DESTINATION "${PROJECT_BINARY_DIR}")
 
 target_link_libraries (${PROJECT_NAME} 
   PUBLIC
+    assets
+    closed-bounded-polyline
+    grid
+    label
+    player
+    points
     sfml-graphics
     sfml-system
     sfml-window
 )
+
+add_subdirectory ("lib")

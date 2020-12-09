@@ -1,0 +1,6 @@
+add_subdirectory ("assets")
+add_subdirectory ("closed-bounded-polyline")
+add_subdirectory ("grid")
+add_subdirectory ("label")
+add_subdirectory ("player")
+add_subdirectory ("points")
