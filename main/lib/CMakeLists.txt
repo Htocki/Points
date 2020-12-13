@@ -1,3 +1,4 @@
+add_subdirectory ("application")
 add_subdirectory ("assets")
 add_subdirectory ("closed-bounded-polyline")
 add_subdirectory ("grid")

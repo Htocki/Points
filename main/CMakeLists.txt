@@ -1,7 +1,7 @@
 
 cmake_minimum_required (VERSION 3.18)
 
-project ("application")
+project ("main")
 
 add_executable (${PROJECT_NAME} "src/Main.cpp")
 
@@ -15,15 +15,7 @@ file (COPY "${CMAKE_SOURCE_DIR}/media" DESTINATION "${PROJECT_BINARY_DIR}")
 
 target_link_libraries (${PROJECT_NAME} 
   PUBLIC
-    assets
-    closed-bounded-polyline
-    grid
-    label
-    player
-    points
-    sfml-graphics
-    sfml-system
-    sfml-window
+    application
 )
 
 add_subdirectory ("lib")

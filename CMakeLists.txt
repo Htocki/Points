@@ -31,4 +31,4 @@ if (GTEST_FOUND)
   include_directories (${GTEST_INCLUDE_DIRS})
 endif ()
 
-add_subdirectory ("application")
+add_subdirectory ("main")

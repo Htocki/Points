@@ -15,4 +15,3 @@ Label::Label(
 void Label::draw(sf::RenderWindow* window) const {
     window->draw(text_);
 }
-
