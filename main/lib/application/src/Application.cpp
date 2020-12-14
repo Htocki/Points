@@ -18,10 +18,12 @@ sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Colo
 
 Application::Application()
     : window_ { sf::VideoMode(800, 600), "POINTS", sf::Style::Default, sf::ContextSettings { 0, 0, 8 } }
-    , grid_ { sf::Vector2f { 150, 50 }, sf::Vector2u { 20, 20 }, 25, sf::Color::Black }
-    , points_ { sf::Vector2f { 150, 50 }, sf::Vector2u { 21, 21 }, 25, 4, sf::Color::White }
+    , grid_ { sf::Vector2f { 150, 75 }, sf::Vector2u { 20, 20 }, 25, sf::Color::Black }
+    , points_ { sf::Vector2f { 150, 75 }, sf::Vector2u { 21, 21 }, 25, 4, sf::Color::White }
     , player1_ { "first", sf::Color::Red, true }
     , player2_ { "second", sf::Color::Blue, false }
+    , player1_indicator_ { sf::Vector2f { 151, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Red, true }
+    , player2_indicator_ { sf::Vector2f { 557, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Blue, false }
     , polyline_ { 37 }
 {
     window_.setFramerateLimit(70);
@@ -57,6 +59,8 @@ void Application::handleEvent(const sf::Event& event) {
                         point.getPosition().y + point.getRadius() - focus_.getRadius()
                     );
                     focus_.setOutlineColor(player1_.getColor());
+                    player1_indicator_.disable();
+                    player2_indicator_.enable();
                     player1_.deactivate();
                     player2_.activate();
                     polyline_.clear();
@@ -70,6 +74,8 @@ void Application::handleEvent(const sf::Event& event) {
                         point.getPosition().y + point.getRadius() - focus_.getRadius()
                     );
                     focus_.setOutlineColor(player2_.getColor());
+                    player1_indicator_.enable();
+                    player2_indicator_.disable();
                     player1_.activate();
                     player2_.deactivate();
                     polyline_.clear();
@@ -124,5 +130,7 @@ void Application::draw() {
         window_.draw(convex);
     }
     polyline_.draw(&window_);
+    player1_indicator_.draw(&window_);
+    player2_indicator_.draw(&window_);
     window_.display();
 }
