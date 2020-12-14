@@ -1,6 +1,6 @@
 #include "Points.h"
 
-Points::Points(const sf::Vector2f& position, const sf::Vector2u& count, sf::Uint32 distance, sf::Uint32 radius, sf::Color color) {
+Points::Points(const sf::Vector2f& position, const sf::Vector2f& count, sf::Uint32 distance, sf::Uint32 radius, sf::Color color) {
     points_.resize(count.x * count.y);
         
     std::size_t k { 0 };

@@ -1,6 +1,6 @@
 #include "Grid.h"
 
-Grid::Grid(const sf::Vector2f& position, const sf::Vector2u& size, sf::Uint32 cell_size, sf::Color color) {
+Grid::Grid(const sf::Vector2f& position, const sf::Vector2f& size, sf::Uint32 cell_size, sf::Color color) {
     for (sf::Uint32 i { 0 }; i <= size.x; ++i) {
         lines_.push_back({ 
             sf::Vertex(sf::Vector2f(position.x + i * cell_size, position.y), color), 

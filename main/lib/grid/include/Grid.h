@@ -9,7 +9,7 @@
 
 class Grid {
   public:
-    Grid(const sf::Vector2f& position, const sf::Vector2u& size, sf::Uint32 cell_size, sf::Color color);
+    Grid(const sf::Vector2f& position, const sf::Vector2f& size, sf::Uint32 cell_size, sf::Color color);
     void draw(sf::RenderWindow* window) const;
 
   private:
