@@ -3,6 +3,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 
+#include "Assets.h"
+
 sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color) {
     sf::Color fill_color { color.r, color.g, color.b, 110 };
     sf::ConvexShape convex;
@@ -25,10 +27,25 @@ Application::Application()
     , player1_indicator_ { sf::Vector2f { 151, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Red, true }
     , player2_indicator_ { sf::Vector2f { 557, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Blue, false }
     , polyline_ { 37 }
+    , step_ { true }
 {
     window_.setFramerateLimit(70);
     focus_.setRadius(6);
     focus_.setOutlineThickness(2);
+
+    player1_score_.SetCharacterSize(22);
+    player1_score_.SetFillColor(player1_.getColor());
+    player1_score_.SetFont(Assets::instance().getSansationFont());
+    player1_score_.SetStyle(sf::Text::Regular);
+    player1_score_.SetString("2");
+    player1_score_.SetPosition(sf::Vector2f { 251, 36 });
+
+    player2_score_.SetCharacterSize(22);
+    player2_score_.SetFillColor(player2_.getColor());
+    player2_score_.SetFont(Assets::instance().getSansationFont());
+    player1_score_.SetStyle(sf::Text::Regular);
+    player2_score_.SetString("0");
+    player2_score_.SetPosition(sf::Vector2f { 532, 36 });
 }
 
 void Application::run() {
@@ -42,15 +59,13 @@ void Application::run() {
 }
 
 void Application::handleEvent(const sf::Event& event) {
-    if (event.type == sf::Event::Closed) {
-        window_.close();
-    }
-    
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.mouseButton.button == sf::Mouse::Left) {
-            sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+    if (event.type == sf::Event::Closed) { window_.close(); }
 
-            if (player1_.isActive() && !player2_.isActive()) {
+    if (step_) {    
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+
                 if (points_.isContainsNotFilledPoint(coords)) {
                     points_.setPointFillColor(coords, player1_.getColor());
                     const auto& point { points_.getPoint(coords) };
@@ -64,31 +79,13 @@ void Application::handleEvent(const sf::Event& event) {
                     player1_.deactivate();
                     player2_.activate();
                     polyline_.clear();
-                }
-            } else {
-                if (points_.isContainsNotFilledPoint(coords)) {
-                    points_.setPointFillColor(coords, player2_.getColor());
-                    const auto& point { points_.getPoint(coords) };
-                    focus_.setPosition(
-                        point.getPosition().x + point.getRadius() - focus_.getRadius(),
-                        point.getPosition().y + point.getRadius() - focus_.getRadius()
-                    );
-                    focus_.setOutlineColor(player2_.getColor());
-                    player1_indicator_.enable();
-                    player2_indicator_.disable();
-                    player1_.activate();
-                    player2_.deactivate();
-                    polyline_.clear();
+                    step_ = false;
                 }
             }
-        }
-    }
 
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (event.mouseButton.button == sf::Mouse::Right) {
-            sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+            if (event.mouseButton.button == sf::Mouse::Right) {
+                sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
                       
-            if (player1_.isActive() && !player2_.isActive()) {
                 if (points_.isPointFounded(coords, player1_.getColor())) {
                     const auto& point { points_.getPoint(coords) };
                     polyline_.addPointPosition(
@@ -102,7 +99,33 @@ void Application::handleEvent(const sf::Event& event) {
                 } else {
                     polyline_.clear();
                 }
-            } else {
+            }
+        }
+    } else {
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+
+                if (points_.isContainsNotFilledPoint(coords)) {
+                    points_.setPointFillColor(coords, player2_.getColor());
+                    const auto& point { points_.getPoint(coords) };
+                    focus_.setPosition(
+                        point.getPosition().x + point.getRadius() - focus_.getRadius(),
+                        point.getPosition().y + point.getRadius() - focus_.getRadius()
+                    );
+                    focus_.setOutlineColor(player2_.getColor());
+                    player1_indicator_.enable();
+                    player2_indicator_.disable();
+                    player1_.activate();
+                    player2_.deactivate();
+                    polyline_.clear();
+                    step_ = true;
+                }
+            }
+
+            if (event.mouseButton.button == sf::Mouse::Right) {
+                sf::Vector2f coords { window_.mapPixelToCoords(sf::Mouse::getPosition(window_)) };
+                      
                 if (points_.isPointFounded(coords, player2_.getColor())) {
                     const auto& point { points_.getPoint(coords) };
                     polyline_.addPointPosition(
@@ -118,7 +141,7 @@ void Application::handleEvent(const sf::Event& event) {
                 }
             }
         }
-    }
+    } 
 }
 
 void Application::draw() {
@@ -132,5 +155,7 @@ void Application::draw() {
     polyline_.draw(&window_);
     player1_indicator_.draw(&window_);
     player2_indicator_.draw(&window_);
+    player1_score_.Draw(&window_);
+    player2_score_.Draw(&window_);
     window_.display();
 }

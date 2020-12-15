@@ -8,10 +8,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include "Button.h"
 #include "ClosedBoundedPolyline.h"
 #include "Grid.h"
 #include "Player.h"
 #include "Points.h"
+#include "Text.h"
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
@@ -70,7 +72,10 @@ class Application {
     Player player2_;
     Indicator player1_indicator_;
     Indicator player2_indicator_;
+    Text player1_score_;
+    Text player2_score_;
     sf::CircleShape focus_;
     ClosedBoundedPolyline polyline_;
     std::vector<sf::ConvexShape> convexes_;
+    bool step_;
 };

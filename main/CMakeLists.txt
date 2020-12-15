@@ -18,4 +18,4 @@ target_link_libraries (${PROJECT_NAME}
     application
 )
 
-add_subdirectory ("lib")
+add_subdirectory ("modules")
