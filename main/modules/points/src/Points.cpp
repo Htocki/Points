@@ -16,7 +16,42 @@ Points::Points(const sf::Vector2f& position, const sf::Vector2f& count, sf::Uint
   for (auto& point : points_) { point.setFillColor(color); }
 }
 
-void Points::setPointFillColor(const sf::Vector2f& position, const sf::Color& color) {
+void Points::Draw(sf::RenderWindow* window) const {
+  for (const auto& point : points_) {
+    if (point.getFillColor() != sf::Color::White) {
+      window->draw(point);
+    }
+  }
+}
+
+bool Points::IsContainsNotFilledPoint(const sf::Vector2f& position) const {
+  for (auto& point : points_) {
+    if (point.getGlobalBounds().contains(position) && point.getFillColor() == sf::Color::White) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Points::IsContainsPointWithColor(const sf::Vector2f& position, const sf::Color& color) const {
+  for (auto& point : points_) {
+    if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Points::IsPointFounded(const sf::Vector2f& position, const sf::Color& color) const {
+  for (auto& point : points_) {
+    if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void Points::SetPointFillColor(const sf::Vector2f& position, const sf::Color& color) {
   for (auto& point : points_) {
     if (point.getGlobalBounds().contains(position)) {
       if (point.getFillColor() == sf::Color::White) {
@@ -26,46 +61,11 @@ void Points::setPointFillColor(const sf::Vector2f& position, const sf::Color& co
   }
 }
 
-bool Points::isContainsNotFilledPoint(const sf::Vector2f& position) const {
-  for (auto& point : points_) {
-    if (point.getGlobalBounds().contains(position) && point.getFillColor() == sf::Color::White) {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool Points::isContainsPointWithColor(const sf::Vector2f& position, const sf::Color& color) const {
-  for (auto& point : points_) {
-    if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool Points::isPointFounded(const sf::Vector2f& position, const sf::Color& color) const {
-  for (auto& point : points_) {
-    if (point.getGlobalBounds().contains(position) && point.getFillColor() == color) {
-      return true;
-    }
-  }
-  return false;
-} 
-
-const sf::CircleShape& Points::getPoint(const sf::Vector2f& position) const {
+const sf::CircleShape& Points::GetPoint(const sf::Vector2f& position) const {
   for (auto& point : points_) {
     if (point.getGlobalBounds().contains(position)) {
       return point;
     }
   }
   throw std::logic_error { "Point not found." };
-}
-
-void Points::draw(sf::RenderWindow* window) const {
-  for (const auto& point : points_) {
-    if (point.getFillColor() != sf::Color::White) {
-      window->draw(point);
-    }
-  }
 }

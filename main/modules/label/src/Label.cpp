@@ -12,6 +12,6 @@ Label::Label(
   text_.setStyle(style);
 }
 
-void Label::draw(sf::RenderWindow* window) const {
+void Label::Draw(sf::RenderWindow* window) const {
   window->draw(text_);
 }

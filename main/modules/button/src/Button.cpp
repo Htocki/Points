@@ -19,7 +19,7 @@ void Button::HandleEvent(const sf::Event& event, const sf::RenderWindow& window)
   }
 }
 
-void Button::Draw(sf::RenderWindow* window) {
+void Button::Draw(sf::RenderWindow* window) const {
   window->draw(m_background);
   m_text.Draw(window);
 }

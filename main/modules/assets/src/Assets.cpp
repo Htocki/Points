@@ -1,11 +1,11 @@
 #include "Assets.h"
 
-const Assets& Assets::instance() {
+const Assets& Assets::Instance() {
   static Assets assets;
   return assets;
 }
 
-const sf::Font& Assets::getSansationFont() const { return m_sansation_font; }
+const sf::Font& Assets::GetSansationFont() const { return m_sansation_font; }
 
 Assets::Assets() {
   if (!m_sansation_font.loadFromFile("media/fonts/Sansation.ttf")) {

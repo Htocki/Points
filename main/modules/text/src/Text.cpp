@@ -1,6 +1,6 @@
 #include "Text.h"
 
-void Text::Draw(sf::RenderWindow* window) {
+void Text::Draw(sf::RenderWindow* window) const {
   window->draw(m_text);
 }
 

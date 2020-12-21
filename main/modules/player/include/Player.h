@@ -7,12 +7,13 @@ class Player {
  public:
   Player(const sf::String& name, const sf::Color& color, bool active);
 
-  void activate();
-  void deactivate();
-  bool isActive() const;
+  void Activate();
+  void Deactivate();
+  
+  bool IsActive() const;
 
-  const sf::Color& getColor() const;
-  const sf::String& getName() const;
+  const sf::Color& GetColor() const;
+  const sf::String& GetName() const;
 
  private:
   sf::String name_;

@@ -6,22 +6,22 @@ Player::Player(const sf::String& name, const sf::Color& color, bool active)
   , active_ { active }
 {}
 
-void Player::activate() {
+void Player::Activate() {
   active_ = true;
 }
 
-void Player::deactivate() {
+void Player::Deactivate() {
   active_ = false;
 }
 
-bool Player::isActive() const {
+bool Player::IsActive() const {
   return active_;
 }
 
-const sf::Color& Player::getColor() const {
+const sf::Color& Player::GetColor() const {
   return color_;
 }
 
-const sf::String& Player::getName() const {
+const sf::String& Player::GetName() const {
   return name_;
 }

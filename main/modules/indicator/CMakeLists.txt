@@ -1,14 +1,14 @@
-cmake_minimum_required (VERSION 3.19)
+cmake_minimum_required (VERSION 3.18)
 
 set (HEADERS
-  "include/Application.h"
+  "include/Indicator.h"
 )
 
 set (SOURCES
-  "src/Application.cpp"
+  "src/Indicator.cpp"
 )
 
-project ("application")
+project ("indicator")
 
 add_library (${PROJECT_NAME}
   STATIC
@@ -32,15 +32,6 @@ target_include_directories (${PROJECT_NAME}
 
 target_link_libraries (${PROJECT_NAME} 
   PUBLIC
-    assets
-    button
-    closed-bounded-polyline
-    grid
-    indicator
-    player
-    points
     sfml-graphics
     sfml-system
-    sfml-window
-    text
 )

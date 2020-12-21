@@ -4,8 +4,8 @@
 
 class Assets {
  public:
-  static const Assets& instance();
-  const sf::Font& getSansationFont() const;
+  static const Assets& Instance();
+  const sf::Font& GetSansationFont() const;
 
  private:
   sf::Font m_sansation_font;

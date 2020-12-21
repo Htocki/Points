@@ -9,7 +9,7 @@
 
 class Text {
  public:
-  void Draw(sf::RenderWindow* window);
+  void Draw(sf::RenderWindow* window) const;
   
   void SetCharacterSize(unsigned int size);
   void SetFillColor(const sf::Color& color);

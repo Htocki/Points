@@ -13,7 +13,7 @@
 class Button {
  public:
   void HandleEvent(const sf::Event& event, const sf::RenderWindow& window);
-  void Draw(sf::RenderWindow* window);
+  void Draw(sf::RenderWindow* window) const;
   
   void SetFillColor(const sf::Color& color);
   void SetOutlineColor(const sf::Color& color);

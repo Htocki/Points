@@ -16,7 +16,7 @@ Grid::Grid(const sf::Vector2f& position, const sf::Vector2f& size, sf::Uint32 ce
   }
 }
 
-void Grid::draw(sf::RenderWindow* window) const {
+void Grid::Draw(sf::RenderWindow* window) const {
   for (const auto& line : lines_) {
     window->draw(line.data(), 2, sf::Lines);
   }

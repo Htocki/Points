@@ -4,7 +4,22 @@ ClosedBoundedPolyline::ClosedBoundedPolyline(unsigned int bounding_radius) {
   bounding_area_.setRadius(bounding_radius);        
 }
 
-void ClosedBoundedPolyline::addPointPosition(const sf::Vector2f& position, const sf::Color& color) {
+void ClosedBoundedPolyline::Draw(sf::RenderWindow* window) const {
+  for (const auto& line : lines_) {
+    window->draw(line.data(), 2, sf::Lines);
+  }
+}
+
+const sf::Vector2f& ClosedBoundedPolyline::At(unsigned int index) const {
+  return positions_.at(index);
+}
+
+void ClosedBoundedPolyline::Clear() {
+  lines_.clear();
+  positions_.clear();
+}
+
+void ClosedBoundedPolyline::AddPointPosition(const sf::Vector2f& position, const sf::Color& color) {
   if (positions_.size() < 1) {
     positions_.push_back(position);
     bounding_area_.setPosition(position.x - bounding_area_.getRadius(), position.y - bounding_area_.getRadius());
@@ -23,13 +38,7 @@ void ClosedBoundedPolyline::addPointPosition(const sf::Vector2f& position, const
   }
 }
 
-void ClosedBoundedPolyline::draw(sf::RenderWindow* window) const {
-  for (const auto& line : lines_) {
-    window->draw(line.data(), 2, sf::Lines);
-  }
-}
-
-bool ClosedBoundedPolyline::isClosed() const { 
+bool ClosedBoundedPolyline::IsClosed() const { 
   if (positions_.size() > 2) {
     if (positions_.at(0) == positions_.at(positions_.size() - 1)) {
       return true;
@@ -38,22 +47,13 @@ bool ClosedBoundedPolyline::isClosed() const {
   return false;
 }
 
-bool ClosedBoundedPolyline::isEmpty() const {
+bool ClosedBoundedPolyline::IsEmpty() const {
   if (positions_.size() > 0) {
     return false;
   }
   return true;
 }
 
-unsigned int ClosedBoundedPolyline::getPointCount() const {
+unsigned int ClosedBoundedPolyline::GetPointCount() const {
   return positions_.size();
-}
-    
-const sf::Vector2f& ClosedBoundedPolyline::at(unsigned int index) const {
-  return positions_.at(index);
-}
-
-void ClosedBoundedPolyline::clear() {
-  lines_.clear();
-  positions_.clear();
 }
