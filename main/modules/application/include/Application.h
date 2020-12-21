@@ -72,8 +72,6 @@ class Application {
     Player player2_;
     Indicator player1_indicator_;
     Indicator player2_indicator_;
-    Text player1_score_;
-    Text player2_score_;
     sf::CircleShape focus_;
     ClosedBoundedPolyline polyline_;
     std::vector<sf::ConvexShape> convexes_;

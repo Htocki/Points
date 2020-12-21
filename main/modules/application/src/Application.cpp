@@ -21,7 +21,7 @@ sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Colo
 Application::Application()
     : window_ { sf::VideoMode(800, 600), "POINTS", sf::Style::Default, sf::ContextSettings { 0, 0, 8 } }
     , grid_ { sf::Vector2f { 150, 75 }, sf::Vector2f { 20, 20 }, 25, sf::Color::Black }
-    , points_ { sf::Vector2f { 150, 75 }, sf::Vector2f { 21, 21 }, 25, 4, sf::Color::White }
+    , points_ { sf::Vector2f { 150, 75 }, sf::Vector2f { 21, 21 }, 25, 5, sf::Color::White }
     , player1_ { "first", sf::Color::Red, true }
     , player2_ { "second", sf::Color::Blue, false }
     , player1_indicator_ { sf::Vector2f { 151, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Red, true }
@@ -30,22 +30,8 @@ Application::Application()
     , step_ { true }
 {
     window_.setFramerateLimit(70);
-    focus_.setRadius(6);
-    focus_.setOutlineThickness(2);
-
-    player1_score_.SetCharacterSize(22);
-    player1_score_.SetFillColor(player1_.getColor());
-    player1_score_.SetFont(Assets::instance().getSansationFont());
-    player1_score_.SetStyle(sf::Text::Regular);
-    player1_score_.SetString("2");
-    player1_score_.SetPosition(sf::Vector2f { 251, 36 });
-
-    player2_score_.SetCharacterSize(22);
-    player2_score_.SetFillColor(player2_.getColor());
-    player2_score_.SetFont(Assets::instance().getSansationFont());
-    player1_score_.SetStyle(sf::Text::Regular);
-    player2_score_.SetString("0");
-    player2_score_.SetPosition(sf::Vector2f { 532, 36 });
+    focus_.setRadius(7);
+    focus_.setOutlineThickness(1);
 }
 
 void Application::run() {
@@ -155,7 +141,5 @@ void Application::draw() {
     polyline_.draw(&window_);
     player1_indicator_.draw(&window_);
     player2_indicator_.draw(&window_);
-    player1_score_.Draw(&window_);
-    player2_score_.Draw(&window_);
     window_.display();
 }
