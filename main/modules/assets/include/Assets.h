@@ -5,6 +5,7 @@
 class Assets {
  public:
   static const Assets& Instance();
+  
   const sf::Font& GetSansationFont() const;
 
  private:

@@ -1,14 +1,14 @@
 cmake_minimum_required (VERSION 3.19)
 
 set (HEADERS
-  "include/Label.h"
+  "include/Line.h"
 )
 
 set (SOURCES
-  "src/Label.cpp"
+  "src/Line.cpp"
 )
 
-project ("label")
+project ("line")
 
 add_library (${PROJECT_NAME}
   STATIC
@@ -35,3 +35,5 @@ target_link_libraries (${PROJECT_NAME}
     sfml-graphics
     sfml-window
 )
+
+add_subdirectory ("test")

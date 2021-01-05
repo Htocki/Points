@@ -1,12 +1,14 @@
 #include "ClosedBoundedPolyline.h"
 
-ClosedBoundedPolyline::ClosedBoundedPolyline(unsigned int bounding_radius) {
+ClosedBoundedPolyline::ClosedBoundedPolyline(unsigned int bounding_radius, float thickness)
+  : thickness_ { thickness }
+{
   bounding_area_.setRadius(bounding_radius);        
 }
 
 void ClosedBoundedPolyline::Draw(sf::RenderWindow* window) const {
-  for (const auto& line : lines_) {
-    window->draw(line.data(), 2, sf::Lines);
+  for (auto& line : lines_) {
+    line.Draw(window);
   }
 }
 
@@ -27,10 +29,14 @@ void ClosedBoundedPolyline::AddPointPosition(const sf::Vector2f& position, const
     if (bounding_area_.getGlobalBounds().contains(position)) {
       positions_.push_back(position);
       bounding_area_.setPosition(position.x - bounding_area_.getRadius(), position.y - bounding_area_.getRadius());
-      lines_.push_back({ 
-        sf::Vertex(sf::Vector2f(positions_.at(positions_.size() - 2)), color),
-        sf::Vertex(sf::Vector2f(positions_.at(positions_.size() - 1)), color)
-      });
+      lines_.push_back(
+        Line {
+          sf::Vector2f { positions_.at(positions_.size() - 2) },
+          sf::Vector2f { positions_.at(positions_.size() - 1) },
+          color,
+          thickness_
+        }
+      );
     } else {
       positions_.clear();
       lines_.clear();
@@ -56,4 +62,16 @@ bool ClosedBoundedPolyline::IsEmpty() const {
 
 unsigned int ClosedBoundedPolyline::GetPointCount() const {
   return positions_.size();
+}
+
+const sf::Color& ClosedBoundedPolyline::GetColor() const {
+  return lines_[0].GetColor();
+}
+
+float ClosedBoundedPolyline::GetThickness() const {
+  return thickness_;
+}
+
+unsigned int ClosedBoundedPolyline::GetBoundingRadius() const {
+  return bounding_area_.getRadius();
 }

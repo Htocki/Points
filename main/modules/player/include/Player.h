@@ -12,7 +12,7 @@ class Player {
   
   bool IsActive() const;
 
-  const sf::Color& GetColor() const;
+  const sf::Color&  GetColor() const;
   const sf::String& GetName() const;
 
  private:

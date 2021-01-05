@@ -5,12 +5,11 @@
 
 #include "Assets.h"
 
-sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color) {
-  sf::Color fill_color { color.r, color.g, color.b, 110 };
+sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color, float thickness) {
   sf::ConvexShape convex;
   convex.setOutlineColor(color);
-  convex.setOutlineThickness(3);
-  convex.setFillColor(fill_color);
+  convex.setOutlineThickness(thickness);
+  convex.setFillColor(sf::Color { color.r, color.g, color.b, 110 });
   convex.setPointCount(polyline.GetPointCount());
   for (unsigned int i { 0 }; i < polyline.GetPointCount(); ++i) {
     convex.setPoint(i, polyline.At(i));
@@ -26,7 +25,7 @@ Application::Application()
   , player2_ { "second", sf::Color::Blue, false }
   , player1_indicator_ { sf::Vector2f { 151, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Red, true }
   , player2_indicator_ { sf::Vector2f { 557, 40 }, sf::Vector2f { 90, 20 }, sf::Color::Blue, false }
-  , polyline_ { 37 }
+  , polyline_ { 37, 4 }
   , step_ { true }
 {
   window_.setFramerateLimit(70);
@@ -79,7 +78,7 @@ void Application::HandleEvent(const sf::Event& event) {
             player1_.GetColor()
           );
           if (polyline_.IsClosed()) {
-            convexes_.push_back(MakeConvex(polyline_, player1_.GetColor()));
+            convexes_.push_back(MakeConvex(polyline_, player1_.GetColor(), polyline_.GetThickness()));
             polyline_.Clear();
           }
         } else {
@@ -119,7 +118,7 @@ void Application::HandleEvent(const sf::Event& event) {
             player2_.GetColor()
           );
           if (polyline_.IsClosed()) {
-            convexes_.push_back(MakeConvex(polyline_, player2_.GetColor()));
+            convexes_.push_back(MakeConvex(polyline_, player2_.GetColor(), polyline_.GetThickness()));
             polyline_.Clear();
           }
         } else {
@@ -141,5 +140,6 @@ void Application::Draw() {
   polyline_.Draw(&window_);
   player1_indicator_.Draw(&window_);
   player2_indicator_.Draw(&window_);
+
   window_.display();
 }
