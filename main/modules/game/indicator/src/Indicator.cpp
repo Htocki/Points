@@ -1,7 +1,10 @@
 #include "Indicator.h"
 
-Indicator::Indicator(const sf::Vector2f& position, const sf::Vector2f& size, const sf::Color& color, bool enabled)
-  : enabled_ { enabled }
+Indicator::Indicator(const sf::Vector2f& position,
+                     const sf::Vector2f& size,
+                     const sf::Color& color,
+                     bool enabled)
+  : enabled_{ enabled }
 {
   rectangle_.setPosition(position);
   rectangle_.setSize(size);
@@ -14,18 +17,28 @@ Indicator::Indicator(const sf::Vector2f& position, const sf::Vector2f& size, con
   }
 }
 
-void Indicator::Enable() {
+void
+Indicator::Enable()
+{
   rectangle_.setFillColor(rectangle_.getOutlineColor());
   enabled_ = true;
 }
 
-void Indicator::Disable() {
+void
+Indicator::Disable()
+{
   rectangle_.setFillColor(sf::Color::White);
   enabled_ = false;
 }
 
-bool Indicator::IsEnabled() const { return enabled_; }
+bool
+Indicator::IsEnabled() const
+{
+  return enabled_;
+}
 
-void Indicator::Draw(sf::RenderWindow* window) const {
+void
+Indicator::Draw(sf::RenderWindow* window) const
+{
   window->draw(rectangle_);
 }

@@ -5,14 +5,13 @@
 #include "Color.h"
 #include "Position.h"
 
-class Line {
- public:
-  Line(
-    const Position& begin,
-    const Position& end,
-    const Color& color,
-    float thickness
-  );
+class Line
+{
+public:
+  Line(const Position& begin,
+       const Position& end,
+       const Color& color,
+       float thickness);
 
   void Draw(sf::RenderWindow* window) const;
 
@@ -22,11 +21,11 @@ class Line {
   void SetThickness(float thickness);
 
   const Position& GetBegin() const;
-  const Color&    GetColor() const;
+  const Color& GetColor() const;
   const Position& GetEnd() const;
-  float           GetThickness() const;
+  float GetThickness() const;
 
- private:
+private:
   void SetVertexPositions(const Position& begin, const Position& end);
 
   Position begin_;

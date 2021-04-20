@@ -3,7 +3,9 @@
 
 #include "Application.h"
 
-int main() {
+int
+main()
+{
   try {
     Application application;
     application.Run();

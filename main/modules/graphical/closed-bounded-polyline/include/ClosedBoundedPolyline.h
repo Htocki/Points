@@ -9,8 +9,9 @@
 #include "Line.h"
 #include "Position.h"
 
-class ClosedBoundedPolyline {
- public:
+class ClosedBoundedPolyline
+{
+public:
   ClosedBoundedPolyline(unsigned int bounding_radius, float thickness);
 
   void Draw(sf::RenderWindow* window) const;
@@ -22,12 +23,12 @@ class ClosedBoundedPolyline {
   bool IsClosed() const;
   bool IsEmpty() const;
 
-  unsigned int  GetBoundingRadius() const;
-  const Color&  GetColor() const;
-  unsigned int  GetPointCount() const;
-  float         GetThickness() const;
+  unsigned int GetBoundingRadius() const;
+  const Color& GetColor() const;
+  unsigned int GetPointCount() const;
+  float GetThickness() const;
 
- private:
+private:
   std::vector<Line> lines_;
   std::vector<Position> positions_;
   sf::CircleShape bounding_area_;
