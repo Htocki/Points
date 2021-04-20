@@ -16,25 +16,26 @@ using Style = sf::Uint32;
 using UInt32 = unsigned int;
 using Window = sf::RenderWindow;
 
-class Text {
- public:
+class Text
+{
+public:
   void Draw(Window* window) const;
-  
+
   void SetCharacterSize(UInt32 size);
   void SetFillColor(const Color& color);
   void SetFont(const Font& font);
   void SetPosition(const Position& position);
   void SetString(const String& string);
   void SetStyle(Style style);
-  
-  UInt32          GetCharacterSize() const;
-  const Color     GetFillColor() const;
-  const Font*     GetFont() const;
-  const Position  GetPosition() const;
-  const Size      GetSize() const;
-  const String&   GetString() const;
-  Style           GetStyle() const;
 
- private:
+  UInt32 GetCharacterSize() const;
+  const Color GetFillColor() const;
+  const Font* GetFont() const;
+  const Position GetPosition() const;
+  const Size GetSize() const;
+  const String& GetString() const;
+  Style GetStyle() const;
+
+private:
   sf::Text m_text;
 };

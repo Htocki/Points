@@ -20,8 +20,9 @@ using Style = sf::Uint32;
 using UInt32 = unsigned int;
 using Window = sf::RenderWindow;
 
-class Button {
- public:
+class Button
+{
+public:
   void HandleEvent(const Event& event, const Window& window);
   void Draw(Window* window) const;
 
@@ -30,28 +31,28 @@ class Button {
   void SetOutlineThickness(Float32 thickness);
   void SetPosition(const Position& position);
   void SetSize(const Size& size);
-  void SetTextString(const String& string); 
+  void SetTextString(const String& string);
   void SetTextCharacterSize(UInt32 size);
   void SetTextFillColor(const Color& color);
   void SetTextFont(const Font& font);
   void SetTextStyle(Style style);
 
-  Color           GetFillColor() const;
-  Color           GetOutlineColor() const;
-  Float32         GetOutlineThickness() const;
-  Position        GetPosition() const;
-  Size            GetSize() const;
-  const String&   GetTextString() const;
-  UInt32          GetTextCharacterSize() const;
-  Color           GetTextFillColor() const;
-  const Font*     GetTextFont() const;
-  Style           GetTextStyle() const;
+  Color GetFillColor() const;
+  Color GetOutlineColor() const;
+  Float32 GetOutlineThickness() const;
+  Position GetPosition() const;
+  Size GetSize() const;
+  const String& GetTextString() const;
+  UInt32 GetTextCharacterSize() const;
+  Color GetTextFillColor() const;
+  const Font* GetTextFont() const;
+  Style GetTextStyle() const;
 
- private:
+private:
   bool IsInside(const Position& position);
   bool IsInside(Float32 x, Float32 y);
-  void SetTextInCenter(); 
- 
+  void SetTextInCenter();
+
   Rectangle m_background;
   Text m_text;
 };

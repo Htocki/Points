@@ -16,14 +16,16 @@
 #include "Points.h"
 #include "Text.h"
 
-sf::ConvexShape MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color);
+sf::ConvexShape
+MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color);
 
-class Application {
- public:
+class Application
+{
+public:
   Application();
   void Run();
 
- private:
+private:
   void HandleEvent(const sf::Event& event);
   void Draw();
 

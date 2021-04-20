@@ -1,14 +1,14 @@
 #include "Color.h"
 
 Color::Color()
-  : a_ { 255 }
-  , b_ { 0 }
-  , g_ { 0 }
-  , r_ { 0 }
+  : a_{ 255 }
+  , b_{ 0 }
+  , g_{ 0 }
+  , r_{ 0 }
 {}
 
 Color::Color(Type type)
-  : a_ { 255 }
+  : a_{ 255 }
 {
   SetType(type);
 }
@@ -20,29 +20,39 @@ Color::Color(Type type, Transparency transparency)
 }
 
 Color::Color(UInt8 r, UInt8 g, UInt8 b, UInt8 a)
-  : a_ { a }
-  , b_ { b }
-  , g_ { g }
-  , r_ { r }
+  : a_{ a }
+  , b_{ b }
+  , g_{ g }
+  , r_{ r }
 {}
 
-void Color::SetA(UInt8 a) {
+void
+Color::SetA(UInt8 a)
+{
   a_ = a;
 }
 
-void Color::SetB(UInt8 b) {
+void
+Color::SetB(UInt8 b)
+{
   b_ = b;
 }
 
-void Color::SetG(UInt8 g) {
+void
+Color::SetG(UInt8 g)
+{
   g_ = g;
 }
 
-void Color::SetR(UInt8 r) {
+void
+Color::SetR(UInt8 r)
+{
   r_ = r;
 }
 
-void Color::SetType(Type type) {
+void
+Color::SetType(Type type)
+{
   switch (type) {
     case Type::Black:
       SetR(0);
@@ -79,7 +89,7 @@ void Color::SetType(Type type) {
       SetG(255);
       SetB(0);
       break;
-    
+
     case Type::Magenta:
       SetR(255);
       SetG(0);
@@ -145,13 +155,17 @@ void Color::SetType(Type type) {
   }
 }
 
-void Color::SetType(UInt8 r, UInt8 g, UInt8 b) {
+void
+Color::SetType(UInt8 r, UInt8 g, UInt8 b)
+{
   r_ = r;
   g_ = g;
   b_ = b;
 }
 
-void Color::SetTransparency(Transparency transparency) {
+void
+Color::SetTransparency(Transparency transparency)
+{
   switch (transparency) {
     case Transparency::Invisible:
       a_ = 0;
@@ -166,33 +180,44 @@ void Color::SetTransparency(Transparency transparency) {
   }
 }
 
-void Color::SetTransparency(UInt8 transparency) {
+void
+Color::SetTransparency(UInt8 transparency)
+{
   a_ = transparency;
 }
 
-UInt8 Color::A() const {
+UInt8
+Color::A() const
+{
   return a_;
 }
 
-UInt8 Color::B() const {
+UInt8
+Color::B() const
+{
   return b_;
 }
 
-UInt8 Color::G() const {
+UInt8
+Color::G() const
+{
   return g_;
 }
 
-UInt8 Color::R() const {
+UInt8
+Color::R() const
+{
   return r_;
 }
 
-bool operator==(Color a, Color b) {
-  return a.R() == b.R()
-      && a.G() == b.G()
-      && a.B() == b.B()
-      && a.A() == b.A();
+bool
+operator==(Color a, Color b)
+{
+  return a.R() == b.R() && a.G() == b.G() && a.B() == b.B() && a.A() == b.A();
 }
 
-bool operator!=(Color a, Color b) {
+bool
+operator!=(Color a, Color b)
+{
   return !operator==(a, b);
 }
