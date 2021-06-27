@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 
@@ -22,16 +23,16 @@ MakeConvex(const ClosedBoundedPolyline& polyline,
 }
 
 Application::Application()
-  : window_{ sf::VideoMode(800, 600),
+  : window_ { sf::VideoMode(800, 600),
              "POINTS",
              sf::Style::Default,
              sf::ContextSettings{ 0, 0, 8 } }
-  , grid_{ { 150, 75 }, { 20, 20 }, 25, Color::Type::Black, 4 }
-  , points_{ sf::Vector2f{ 150, 75 },
-             sf::Vector2f{ 21, 21 },
-             25,
-             5,
-             sf::Color::White }
+  , field_(
+      sf::Vector2f(100.f, 90.f),
+      sf::Vector2f(30.f, 20.f),
+      20,
+      sf::Color::Black,
+      5)
   , player1_{ "first", Color::Type::Red, true }
   , player2_{ "second", Color::Type::Blue, false }
   , player1_indicator_{ sf::Vector2f{ 151, 40 },
@@ -46,8 +47,6 @@ Application::Application()
   , step_{ true }
 {
   window_.setFramerateLimit(70);
-  focus_.setRadius(7);
-  focus_.setOutlineThickness(1);
 }
 
 void
@@ -69,21 +68,17 @@ Application::HandleEvent(const sf::Event& event)
     window_.close();
   }
 
+  sf::Vector2f coords{ window_.mapPixelToCoords(
+    sf::Mouse::getPosition(window_))
+  };
+
   if (step_) {
     if (event.type == sf::Event::MouseButtonPressed) {
+      const auto col{ player1_.GetColor() };
+      sf::Color color {col.R(), col.G(), col.B(), col.A()};
+      
       if (event.mouseButton.button == sf::Mouse::Left) {
-        sf::Vector2f coords{ window_.mapPixelToCoords(
-          sf::Mouse::getPosition(window_)) };
-        const auto color{ player1_.GetColor() };
-        if (points_.IsContainsNotFilledPoint(coords)) {
-          points_.SetPointFillColor(
-            coords, { color.R(), color.G(), color.B(), color.A() });
-          const auto& point{ points_.GetPoint(coords) };
-          focus_.setPosition(
-            point.getPosition().x + point.getRadius() - focus_.getRadius(),
-            point.getPosition().y + point.getRadius() - focus_.getRadius());
-          focus_.setOutlineColor(
-            { color.R(), color.G(), color.B(), color.A() });
+        if (field_.setNodeColor(coords, color)) {
           player1_indicator_.Disable();
           player2_indicator_.Enable();
           player1_.Deactivate();
@@ -94,19 +89,17 @@ Application::HandleEvent(const sf::Event& event)
       }
 
       if (event.mouseButton.button == sf::Mouse::Right) {
-        sf::Vector2f coords{ window_.mapPixelToCoords(
-          sf::Mouse::getPosition(window_)) };
-        const auto color{ player1_.GetColor() };
-        if (points_.IsPointFounded(
-              coords, { color.R(), color.G(), color.B(), color.A() })) {
-          const auto& point{ points_.GetPoint(coords) };
+        if (field_.correctPosition(coords, color)) {
           polyline_.AddPointPosition(
-            { point.getPosition().x + point.getRadius(),
-              point.getPosition().y + point.getRadius() },
-            player1_.GetColor());
+            {coords.x, coords.y}, 
+            {color.r, color.g, color.b, color.a}
+          );
           if (polyline_.IsClosed()) {
             convexes_.push_back(MakeConvex(
-              polyline_, player1_.GetColor(), polyline_.GetThickness()));
+              polyline_,
+              {color.r, color.g, color.b, color.a},
+              polyline_.GetThickness())
+            );
             polyline_.Clear();
           }
         } else {
@@ -116,19 +109,11 @@ Application::HandleEvent(const sf::Event& event)
     }
   } else {
     if (event.type == sf::Event::MouseButtonPressed) {
+      const auto col{ player2_.GetColor() };
+      sf::Color color {col.R(), col.G(), col.B(), col.A()};
+      
       if (event.mouseButton.button == sf::Mouse::Left) {
-        sf::Vector2f coords{ window_.mapPixelToCoords(
-          sf::Mouse::getPosition(window_)) };
-        const auto color{ player2_.GetColor() };
-        if (points_.IsContainsNotFilledPoint(coords)) {
-          points_.SetPointFillColor(
-            coords, { color.R(), color.G(), color.B(), color.A() });
-          const auto& point{ points_.GetPoint(coords) };
-          focus_.setPosition(
-            point.getPosition().x + point.getRadius() - focus_.getRadius(),
-            point.getPosition().y + point.getRadius() - focus_.getRadius());
-          focus_.setOutlineColor(
-            { color.R(), color.G(), color.B(), color.A() });
+        if (field_.setNodeColor(coords, color)) {
           player1_indicator_.Enable();
           player2_indicator_.Disable();
           player1_.Activate();
@@ -139,19 +124,17 @@ Application::HandleEvent(const sf::Event& event)
       }
 
       if (event.mouseButton.button == sf::Mouse::Right) {
-        sf::Vector2f coords{ window_.mapPixelToCoords(
-          sf::Mouse::getPosition(window_)) };
-        const auto color{ player2_.GetColor() };
-        if (points_.IsPointFounded(
-              coords, { color.R(), color.G(), color.B(), color.A() })) {
-          const auto& point{ points_.GetPoint(coords) };
+        if (field_.correctPosition(coords, color)) {
           polyline_.AddPointPosition(
-            { point.getPosition().x + point.getRadius(),
-              point.getPosition().y + point.getRadius() },
-            player2_.GetColor());
+            {coords.x, coords.y}, 
+            {color.r, color.g, color.b, color.a}
+          );
           if (polyline_.IsClosed()) {
             convexes_.push_back(MakeConvex(
-              polyline_, player2_.GetColor(), polyline_.GetThickness()));
+              polyline_,
+              {color.r, color.g, color.b, color.a},
+              polyline_.GetThickness())
+            );
             polyline_.Clear();
           }
         } else {
@@ -166,9 +149,7 @@ void
 Application::Draw()
 {
   window_.clear(sf::Color::White);
-  grid_.Draw(&window_);
-  window_.draw(focus_);
-  points_.Draw(&window_);
+  field_.draw(&window_);
   for (const auto& convex : convexes_) {
     window_.draw(convex);
   }

@@ -9,10 +9,9 @@
 
 #include "ClosedBoundedPolyline.h"
 #include "Color.h"
-#include "Grid.h"
+#include "Field.h"
 #include "Indicator.h"
 #include "Player.h"
-#include "Points.h"
 
 sf::ConvexShape
 MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color);
@@ -28,13 +27,11 @@ private:
   void Draw();
 
   sf::RenderWindow window_;
-  Grid grid_;
-  Points points_;
+  Field field_;
   Player player1_;
   Player player2_;
   Indicator player1_indicator_;
   Indicator player2_indicator_;
-  sf::CircleShape focus_;
   ClosedBoundedPolyline polyline_;
   std::vector<sf::ConvexShape> convexes_;
   bool step_;
