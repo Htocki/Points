@@ -28,7 +28,6 @@ target_include_directories (${PROJECT_NAME}
 target_link_libraries (${PROJECT_NAME} 
   PUBLIC
     assets
-    button
     closed-bounded-polyline
     grid
     indicator
@@ -37,7 +36,6 @@ target_link_libraries (${PROJECT_NAME}
     sfml-graphics
     sfml-system
     sfml-window
-    text
 )
 
 add_subdirectory ("test")
