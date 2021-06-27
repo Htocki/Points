@@ -17,7 +17,7 @@ MakeConvex(const ClosedBoundedPolyline& polyline,
   convex.setFillColor({ color.R(), color.G(), color.B(), 110 });
   convex.setPointCount(polyline.GetPointCount());
   for (unsigned int i{ 0 }; i < polyline.GetPointCount(); ++i) {
-    convex.setPoint(i, { polyline.At(i).X(), polyline.At(i).Y() });
+    convex.setPoint(i, { polyline.At(i).x, polyline.At(i).y });
   }
   return convex;
 }

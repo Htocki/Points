@@ -7,7 +7,6 @@
 
 #include "Color.h"
 #include "Line.h"
-#include "Position.h"
 
 class ClosedBoundedPolyline
 {
@@ -16,8 +15,8 @@ public:
 
   void Draw(sf::RenderWindow* window) const;
 
-  void AddPointPosition(const Position& position, const Color& color);
-  const Position& At(unsigned int index) const;
+  void AddPointPosition(const sf::Vector2f& position, const Color& color);
+  const sf::Vector2f& At(unsigned int index) const;
   void Clear();
 
   bool IsClosed() const;
@@ -30,7 +29,7 @@ public:
 
 private:
   std::vector<Line> lines_;
-  std::vector<Position> positions_;
+  std::vector<sf::Vector2f> positions_;
   sf::CircleShape bounding_area_;
   float thickness_;
 };

@@ -6,7 +6,7 @@ ClosedPolyline::ClosedPolyline(const Color& color, float thickness)
   : OpenPolyline{ color, thickness }
 {}
 
-ClosedPolyline::ClosedPolyline(std::initializer_list<Position> nodes,
+ClosedPolyline::ClosedPolyline(std::initializer_list<sf::Vector2f> nodes,
                                const Color& color,
                                float thickness)
   : OpenPolyline{ nodes, color, thickness }
@@ -17,7 +17,7 @@ ClosedPolyline::ClosedPolyline(std::initializer_list<Position> nodes,
 }
 
 void
-ClosedPolyline::Add(const Position& node)
+ClosedPolyline::Add(const sf::Vector2f& node)
 {
   if (NodesCount() == 2) {
     OpenPolyline::Add(node);

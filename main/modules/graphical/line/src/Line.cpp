@@ -4,8 +4,8 @@
 
 #include <SFML/Graphics/Vertex.hpp>
 
-Line::Line(const Position& begin,
-           const Position& end,
+Line::Line(const sf::Vector2f& begin,
+           const sf::Vector2f& end,
            const Color& color,
            float thickness)
   : begin_{ begin }
@@ -22,7 +22,7 @@ Line::Draw(sf::RenderWindow* window) const
   sf::Vertex vertices[4];
 
   for (unsigned int i{ 0 }; i < 4; ++i) {
-    vertices[i].position = { vertices_[i].X(), vertices_[i].Y() };
+    vertices[i].position = { vertices_[i].x, vertices_[i].y };
   }
 
   for (unsigned int i{ 0 }; i < 4; ++i) {
@@ -32,14 +32,14 @@ Line::Draw(sf::RenderWindow* window) const
 }
 
 void
-Line::SetBegin(const Position& begin)
+Line::SetBegin(const sf::Vector2f& begin)
 {
   SetVertexPositions(begin, end_);
   begin_ = begin;
 }
 
 void
-Line::SetEnd(const Position& end)
+Line::SetEnd(const sf::Vector2f& end)
 {
   SetVertexPositions(begin_, end);
   end_ = end;
@@ -57,13 +57,13 @@ Line::SetThickness(float thickness)
   thickness_ = thickness;
 }
 
-const Position&
+const sf::Vector2f&
 Line::GetBegin() const
 {
   return begin_;
 }
 
-const Position&
+const sf::Vector2f&
 Line::GetEnd() const
 {
   return end_;
@@ -82,14 +82,14 @@ Line::GetThickness() const
 }
 
 void
-Line::SetVertexPositions(const Position& begin, const Position& end)
+Line::SetVertexPositions(const sf::Vector2f& begin, const sf::Vector2f& end)
 {
-  Position direction{ end - begin };
-  Position unit_direction{ direction /
-                           std::sqrt(direction.X() * direction.X() +
-                                     direction.Y() * direction.Y()) };
-  Position unit_perpendicular{ -unit_direction.Y(), unit_direction.X() };
-  Position offset{ unit_perpendicular * (thickness_ / 2.f) };
+  sf::Vector2f direction{ end - begin };
+  sf::Vector2f unit_direction{ direction /
+                           std::sqrt(direction.x * direction.x +
+                                     direction.y * direction.y) };
+  sf::Vector2f unit_perpendicular{ -unit_direction.y, unit_direction.x };
+  sf::Vector2f offset{ unit_perpendicular * (thickness_ / 2.f) };
 
   vertices_[0] = begin + offset;
   vertices_[1] = end + offset;
