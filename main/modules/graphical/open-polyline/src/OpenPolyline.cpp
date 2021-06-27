@@ -7,7 +7,7 @@ OpenPolyline::OpenPolyline(const Color& color, float thickness)
   , thickness_{ thickness }
 {}
 
-OpenPolyline::OpenPolyline(std::initializer_list<Position> nodes,
+OpenPolyline::OpenPolyline(std::initializer_list<sf::Vector2f> nodes,
                            const Color& color,
                            float thickness)
   : color_{ color }
@@ -19,14 +19,14 @@ OpenPolyline::OpenPolyline(std::initializer_list<Position> nodes,
 }
 
 void
-OpenPolyline::Add(const Position& node)
+OpenPolyline::Add(const sf::Vector2f& node)
 {
   if (nodes_.size() < 1) {
     nodes_.push_back(node);
   } else {
     nodes_.push_back(node);
-    lines_.push_back(Line{ Position{ nodes_.at(nodes_.size() - 2) },
-                           Position{ nodes_.at(nodes_.size() - 1) },
+    lines_.push_back(Line{ sf::Vector2f{ nodes_.at(nodes_.size() - 2) },
+                           sf::Vector2f{ nodes_.at(nodes_.size() - 1) },
                            color_,
                            thickness_ });
   }
@@ -40,7 +40,7 @@ OpenPolyline::Clear()
 }
 
 void
-OpenPolyline::Remove(const Position& node)
+OpenPolyline::Remove(const sf::Vector2f& node)
 {
   const auto new_end{ std::remove(std::begin(nodes_), std::end(nodes_), node) };
   nodes_.erase(new_end, std::end(nodes_));
@@ -58,7 +58,7 @@ OpenPolyline::SetThickness(float thickness)
   thickness_ = thickness;
 }
 
-const Position&
+const sf::Vector2f&
 OpenPolyline::At(unsigned int index) const
 {
   return nodes_.at(index);

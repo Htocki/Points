@@ -3,34 +3,33 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "Color.h"
-#include "Position.h"
 
 class Line
 {
 public:
-  Line(const Position& begin,
-       const Position& end,
+  Line(const sf::Vector2f& begin,
+       const sf::Vector2f& end,
        const Color& color,
        float thickness);
 
   void Draw(sf::RenderWindow* window) const;
 
-  void SetBegin(const Position& begin);
+  void SetBegin(const sf::Vector2f& begin);
   void SetColor(const Color& color);
-  void SetEnd(const Position& end);
+  void SetEnd(const sf::Vector2f& end);
   void SetThickness(float thickness);
 
-  const Position& GetBegin() const;
+  const sf::Vector2f& GetBegin() const;
   const Color& GetColor() const;
-  const Position& GetEnd() const;
+  const sf::Vector2f& GetEnd() const;
   float GetThickness() const;
 
 private:
-  void SetVertexPositions(const Position& begin, const Position& end);
+  void SetVertexPositions(const sf::Vector2f& begin, const sf::Vector2f& end);
 
-  Position begin_;
-  Position end_;
-  Position vertices_[4];
+  sf::Vector2f begin_;
+  sf::Vector2f end_;
+  sf::Vector2f vertices_[4];
   Color color_;
   float thickness_;
 };

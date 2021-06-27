@@ -30,7 +30,6 @@ target_link_libraries (${PROJECT_NAME}
     color
     line
     open-polyline
-    position
     sfml-graphics
 )
 
