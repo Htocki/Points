@@ -1,6 +1,5 @@
 add_subdirectory ("application")
 add_subdirectory ("assets")
-add_subdirectory ("grid")
 add_subdirectory ("indicator")
 add_subdirectory ("player")
-add_subdirectory ("points")
+add_subdirectory ("field")

@@ -29,10 +29,9 @@ target_link_libraries (${PROJECT_NAME}
   PUBLIC
     assets
     closed-bounded-polyline
-    grid
+    field
     indicator
     player
-    points
     sfml-graphics
     sfml-system
     sfml-window

@@ -1,9 +1,9 @@
 cmake_minimum_required (VERSION 3.19)
 
-set (HEADERS "include/Grid.h")
-set (SOURCES "src/Grid.cpp")
+set (HEADERS "include/Field.h")
+set (SOURCES "src/Field.cpp")
 
-project ("grid")
+project ("field")
 
 add_library (${PROJECT_NAME}
   STATIC
@@ -31,5 +31,3 @@ target_link_libraries (${PROJECT_NAME}
     position
     sfml-graphics
 )
-
-add_subdirectory ("test")
