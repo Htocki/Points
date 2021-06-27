@@ -15,7 +15,7 @@ ClosedBoundedPolyline::Draw(sf::RenderWindow* window) const
   }
 }
 
-const Position&
+const sf::Vector2f&
 ClosedBoundedPolyline::At(unsigned int index) const
 {
   return positions_.at(index);
@@ -29,20 +29,20 @@ ClosedBoundedPolyline::Clear()
 }
 
 void
-ClosedBoundedPolyline::AddPointPosition(const Position& position,
+ClosedBoundedPolyline::AddPointPosition(const sf::Vector2f& position,
                                         const Color& color)
 {
   if (positions_.size() < 1) {
     positions_.push_back(position);
-    bounding_area_.setPosition(position.X() - bounding_area_.getRadius(),
-                               position.Y() - bounding_area_.getRadius());
+    bounding_area_.setPosition(position.x - bounding_area_.getRadius(),
+                               position.y - bounding_area_.getRadius());
   } else {
-    if (bounding_area_.getGlobalBounds().contains(position.X(), position.Y())) {
+    if (bounding_area_.getGlobalBounds().contains(position.x, position.y)) {
       positions_.push_back(position);
-      bounding_area_.setPosition(position.X() - bounding_area_.getRadius(),
-                                 position.Y() - bounding_area_.getRadius());
-      lines_.push_back(Line{ Position{ positions_.at(positions_.size() - 2) },
-                             Position{ positions_.at(positions_.size() - 1) },
+      bounding_area_.setPosition(position.x - bounding_area_.getRadius(),
+                                 position.y - bounding_area_.getRadius());
+      lines_.push_back(Line{ sf::Vector2f{ positions_.at(positions_.size() - 2) },
+                             sf::Vector2f{ positions_.at(positions_.size() - 1) },
                              color,
                              thickness_ });
     } else {
