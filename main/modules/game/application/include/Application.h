@@ -7,14 +7,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "Button.h"
 #include "ClosedBoundedPolyline.h"
 #include "Color.h"
 #include "Grid.h"
 #include "Indicator.h"
 #include "Player.h"
 #include "Points.h"
-#include "Text.h"
 
 sf::ConvexShape
 MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color);
