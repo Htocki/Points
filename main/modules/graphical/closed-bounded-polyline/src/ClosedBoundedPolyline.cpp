@@ -30,7 +30,7 @@ ClosedBoundedPolyline::Clear()
 
 void
 ClosedBoundedPolyline::AddPointPosition(const sf::Vector2f& position,
-                                        const Color& color)
+                                        sf::Color color)
 {
   if (positions_.size() < 1) {
     positions_.push_back(position);
@@ -78,9 +78,7 @@ ClosedBoundedPolyline::GetPointCount() const
   return positions_.size();
 }
 
-const Color&
-ClosedBoundedPolyline::GetColor() const
-{
+sf::Color ClosedBoundedPolyline::GetColor() const {
   return lines_[0].GetColor();
 }
 

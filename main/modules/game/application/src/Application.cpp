@@ -8,13 +8,14 @@
 
 sf::ConvexShape
 MakeConvex(const ClosedBoundedPolyline& polyline,
-           const Color& color,
+           sf::Color color,
            float thickness)
 {
   sf::ConvexShape convex;
-  convex.setOutlineColor({ color.R(), color.G(), color.B(), color.A() });
+  convex.setOutlineColor(color);
   convex.setOutlineThickness(thickness);
-  convex.setFillColor({ color.R(), color.G(), color.B(), 110 });
+  color.a = 125;
+  convex.setFillColor(color);
   convex.setPointCount(polyline.GetPointCount());
   for (unsigned int i{ 0 }; i < polyline.GetPointCount(); ++i) {
     convex.setPoint(i, { polyline.At(i).x, polyline.At(i).y });
@@ -33,8 +34,8 @@ Application::Application()
       20,
       sf::Color::Black,
       5)
-  , player1_{ "first", Color::Type::Red, true }
-  , player2_{ "second", Color::Type::Blue, false }
+  , player1_{ "first", sf::Color::Red, true }
+  , player2_{ "second", sf::Color::Blue, false }
   , player1_indicator_{ sf::Vector2f{ 151, 40 },
                         sf::Vector2f{ 90, 20 },
                         sf::Color::Red,
@@ -74,8 +75,7 @@ Application::HandleEvent(const sf::Event& event)
 
   if (step_) {
     if (event.type == sf::Event::MouseButtonPressed) {
-      const auto col{ player1_.GetColor() };
-      sf::Color color {col.R(), col.G(), col.B(), col.A()};
+      sf::Color color { player1_.GetColor() };
       
       if (event.mouseButton.button == sf::Mouse::Left) {
         if (field_.setNodeColor(coords, color)) {
@@ -90,15 +90,10 @@ Application::HandleEvent(const sf::Event& event)
 
       if (event.mouseButton.button == sf::Mouse::Right) {
         if (field_.correctPosition(coords, color)) {
-          polyline_.AddPointPosition(
-            {coords.x, coords.y}, 
-            {color.r, color.g, color.b, color.a}
-          );
+          polyline_.AddPointPosition(coords, color);
           if (polyline_.IsClosed()) {
-            convexes_.push_back(MakeConvex(
-              polyline_,
-              {color.r, color.g, color.b, color.a},
-              polyline_.GetThickness())
+            convexes_.push_back(
+              MakeConvex(polyline_, color, polyline_.GetThickness())
             );
             polyline_.Clear();
           }
@@ -109,8 +104,7 @@ Application::HandleEvent(const sf::Event& event)
     }
   } else {
     if (event.type == sf::Event::MouseButtonPressed) {
-      const auto col{ player2_.GetColor() };
-      sf::Color color {col.R(), col.G(), col.B(), col.A()};
+      sf::Color color { player2_.GetColor() };
       
       if (event.mouseButton.button == sf::Mouse::Left) {
         if (field_.setNodeColor(coords, color)) {
@@ -125,15 +119,10 @@ Application::HandleEvent(const sf::Event& event)
 
       if (event.mouseButton.button == sf::Mouse::Right) {
         if (field_.correctPosition(coords, color)) {
-          polyline_.AddPointPosition(
-            {coords.x, coords.y}, 
-            {color.r, color.g, color.b, color.a}
-          );
+          polyline_.AddPointPosition(coords, color);
           if (polyline_.IsClosed()) {
             convexes_.push_back(MakeConvex(
-              polyline_,
-              {color.r, color.g, color.b, color.a},
-              polyline_.GetThickness())
+              polyline_, color, polyline_.GetThickness())
             );
             polyline_.Clear();
           }
