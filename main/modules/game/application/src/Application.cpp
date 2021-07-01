@@ -25,7 +25,7 @@ MakeConvex(const ClosedBoundedPolyline& polyline,
 
 Application::Application()
   : window_ { sf::VideoMode(800, 600),
-             "POINTS",
+             L"Точки",
              sf::Style::Default,
              sf::ContextSettings{ 0, 0, 8 } }
   , field_(
