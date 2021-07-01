@@ -1,24 +1,23 @@
 #pragma once
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/String.hpp>
-
-#include "Color.h"
 
 class Player
 {
 public:
-  Player(const sf::String& name, const Color& color, bool active);
+  Player(const sf::String& name, sf::Color color, bool active);
 
   void Activate();
   void Deactivate();
 
   bool IsActive() const;
 
-  const Color& GetColor() const;
+  sf::Color GetColor() const;
   const sf::String& GetName() const;
 
 private:
   sf::String name_;
-  Color color_;
+  sf::Color color_;
   bool active_;
 };

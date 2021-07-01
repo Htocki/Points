@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(const sf::String& name, const Color& color, bool active)
+Player::Player(const sf::String& name, sf::Color color, bool active)
   : name_{ name }
   , color_{ color }
   , active_{ active }
@@ -24,9 +24,7 @@ Player::IsActive() const
   return active_;
 }
 
-const Color&
-Player::GetColor() const
-{
+sf::Color Player::GetColor() const {
   return color_;
 }
 

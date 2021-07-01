@@ -2,11 +2,12 @@
 
 #include <cmath>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Vertex.hpp>
 
 Line::Line(const sf::Vector2f& begin,
            const sf::Vector2f& end,
-           const Color& color,
+           sf::Color color,
            float thickness)
   : begin_{ begin }
   , end_{ end }
@@ -26,7 +27,7 @@ Line::Draw(sf::RenderWindow* window) const
   }
 
   for (unsigned int i{ 0 }; i < 4; ++i) {
-    vertices[i].color = { color_.R(), color_.G(), color_.B(), color_.A() };
+    vertices[i].color = { color_ };
   }
   window->draw(vertices, thickness_, sf::Quads);
 }
@@ -45,9 +46,7 @@ Line::SetEnd(const sf::Vector2f& end)
   end_ = end;
 }
 
-void
-Line::SetColor(const Color& color)
-{
+void Line::SetColor(sf::Color color) {
   color_ = color;
 }
 
@@ -69,9 +68,7 @@ Line::GetEnd() const
   return end_;
 }
 
-const Color&
-Line::GetColor() const
-{
+sf::Color Line::GetColor() const {
   return color_;
 }
 

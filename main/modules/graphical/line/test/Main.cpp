@@ -2,7 +2,6 @@
 
 #include <SFML/System/Vector2.hpp>
 
-#include "Color.h"
 #include "Line.h"
 
 int
@@ -18,7 +17,7 @@ protected:
   LineTest()
     : line{ sf::Vector2f{ 10.f, 10.f },
             sf::Vector2f{ 50.f, 50.f },
-            Color::Type::Yellow,
+            sf::Color(sf::Color::Yellow),
             5 }
   {}
 
@@ -30,7 +29,7 @@ TEST_F(LineTest, ConstructorWithParameters)
 {
   ASSERT_EQ(sf::Vector2f(10.f, 10.f), line.GetBegin());
   ASSERT_EQ(sf::Vector2f(50.f, 50.f), line.GetEnd());
-  ASSERT_EQ(Color::Type::Yellow, line.GetColor());
+  ASSERT_EQ(sf::Color(sf::Color::Yellow), line.GetColor());
   ASSERT_EQ(5, line.GetThickness());
 }
 
@@ -66,7 +65,7 @@ TEST_F(LineTest, GetEndPosition)
 
 TEST_F(LineTest, GetColor)
 {
-  ASSERT_EQ(Color::Type::Yellow, line.GetColor());
+  ASSERT_EQ(sf::Color(sf::Color::Yellow), line.GetColor());
 }
 
 TEST_F(LineTest, GetThickness)

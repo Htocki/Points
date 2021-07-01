@@ -1,6 +1,5 @@
 add_subdirectory ("closed-bounded-polyline")
 add_subdirectory ("closed-polyline")
-add_subdirectory ("color")
 add_subdirectory ("line")
 add_subdirectory ("open-polyline")
 add_subdirectory ("polygon")

@@ -2,12 +2,12 @@
 
 #include "Line.h"
 
-ClosedPolyline::ClosedPolyline(const Color& color, float thickness)
+ClosedPolyline::ClosedPolyline(sf::Color color, float thickness)
   : OpenPolyline{ color, thickness }
 {}
 
 ClosedPolyline::ClosedPolyline(std::initializer_list<sf::Vector2f> nodes,
-                               const Color& color,
+                               sf::Color color,
                                float thickness)
   : OpenPolyline{ nodes, color, thickness }
 {

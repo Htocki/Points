@@ -3,9 +3,6 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-#include "Color.h"
-#include "Position.h"
-
 using Float32 = float;
 using Size = Position;
 using UInt32 = unsigned int;

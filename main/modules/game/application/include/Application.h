@@ -8,7 +8,6 @@
 #include <SFML/Window/Event.hpp>
 
 #include "ClosedBoundedPolyline.h"
-#include "Color.h"
 #include "Field.h"
 #include "Indicator.h"
 #include "Player.h"

@@ -1,7 +1,5 @@
 #include "gtest/gtest.h"
 
-#include "Color.h"
-
 int
 main(int argc, char** argv)
 {

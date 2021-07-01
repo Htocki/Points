@@ -2,13 +2,13 @@
 
 #include <algorithm>
 
-OpenPolyline::OpenPolyline(const Color& color, float thickness)
+OpenPolyline::OpenPolyline(sf::Color color, float thickness)
   : color_{ color }
   , thickness_{ thickness }
 {}
 
 OpenPolyline::OpenPolyline(std::initializer_list<sf::Vector2f> nodes,
-                           const Color& color,
+                           sf::Color color,
                            float thickness)
   : color_{ color }
   , thickness_{ thickness }
@@ -46,9 +46,7 @@ OpenPolyline::Remove(const sf::Vector2f& node)
   nodes_.erase(new_end, std::end(nodes_));
 }
 
-void
-OpenPolyline::SetColor(const Color& color)
-{
+void OpenPolyline::SetColor(sf::Color color) {
   color_ = color;
 }
 
@@ -72,9 +70,7 @@ OpenPolyline::Draw(sf::RenderWindow* window) const
   }
 }
 
-const Color&
-OpenPolyline::GetColor() const
-{
+sf::Color OpenPolyline::GetColor() const {
   return color_;
 }
 
