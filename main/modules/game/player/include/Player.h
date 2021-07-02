@@ -5,18 +5,24 @@
 
 class Player {
 public:
-  Player(const sf::String& name, sf::Color color, bool active);
-
+  // Инициализирующие
+  Player(const sf::String& name, sf::Color color, bool state);
+  
+  // Модифицирующие
   void Activate();
   void Deactivate();
-
-  bool IsActive() const;
-
-  sf::Color GetColor() const;
+  void IncreaseScoreBy(sf::Uint64 value);
+  void SetScoreToZero();
+  
+  // Немодифицирующие
+  sf::Color         GetColor() const;
   const sf::String& GetName() const;
+  sf::Uint64        GetScore() const;
+  bool              IsActive() const;
 
 private:
-  sf::String name_;
-  sf::Color color_;
-  bool active_;
+  bool        state_;
+  sf::Color   color_;
+  sf::String  name_;
+  sf::Uint64  score_;
 };

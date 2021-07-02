@@ -5,6 +5,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/ConvexShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include "ClosedBoundedPolyline.h"
@@ -21,13 +22,15 @@ private:
   void HandleEvent(const sf::Event& event);
   void Draw();
 
-  sf::RenderWindow window_;
+  std::vector<sf::ConvexShape> convexes_;
   Field field_;
+  Indicator indicator1_;
+  Indicator indicator2_;
   Player player1_;
   Player player2_;
-  Indicator player1_indicator_;
-  Indicator player2_indicator_;
   ClosedBoundedPolyline polyline_;
-  std::vector<sf::ConvexShape> convexes_;
+  sf::Text score1_;
+  sf::Text score2_;
   bool step_;
+  sf::RenderWindow window_;
 };

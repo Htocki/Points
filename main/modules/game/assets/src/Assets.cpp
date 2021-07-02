@@ -5,12 +5,12 @@ const Assets& Assets::Instance() {
   return assets;
 }
 
-const sf::Font& Assets::GetSansationFont() const {
-  return m_sansation_font;
+const sf::Font& Assets::GetPixelFont7() const {
+  return pixel_font7_;
 }
 
 Assets::Assets() {
-  if (!m_sansation_font.loadFromFile("media/fonts/Sansation.ttf")) {
-    throw std::invalid_argument("File \"media/fonts/Sansation.ttf\" not found.");
+  if (!pixel_font7_.loadFromFile("media/fonts/PixelFont7.ttf")) {
+    throw std::invalid_argument("File \"media/fonts/PixelFont7.ttf\" not found.");
   }
 }
