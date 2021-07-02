@@ -12,11 +12,7 @@
 #include "Indicator.h"
 #include "Player.h"
 
-sf::ConvexShape
-MakeConvex(const ClosedBoundedPolyline& polyline, const sf::Color& color);
-
-class Application
-{
+class Application {
 public:
   Application();
   void Run();

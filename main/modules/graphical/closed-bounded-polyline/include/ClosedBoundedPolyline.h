@@ -8,8 +8,7 @@
 
 #include "Line.h"
 
-class ClosedBoundedPolyline
-{
+class ClosedBoundedPolyline {
 public:
   ClosedBoundedPolyline(unsigned int bounding_radius, float thickness);
 
