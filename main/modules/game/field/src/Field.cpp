@@ -16,9 +16,9 @@ Field::Field(
 {
   nodes_.resize(size.x * size.y);
 
-  size_t k{0};
-  for (size_t i{0}; i < size.x; ++i) {
-    for (size_t j{0}; j < size.y; ++j) {
+  size_t k {0};
+  for (size_t i {0}; i < size.x; ++i) {
+    for (size_t j {0}; j < size.y; ++j) {
       nodes_.at(k).setPosition(
         position.x + i*cell_size - nodes_radius,
         position.y + j*cell_size - nodes_radius);
@@ -83,7 +83,7 @@ bool Field::correctPosition(sf::Vector2f& position, sf::Color color) const {
 void Field::draw(sf::RenderWindow* window) const
 {
   // Отрисовка сетки
-  for (size_t i{0}; i <= size_.x; ++i) {
+  for (size_t i {0}; i <= size_.x; ++i) {
     sf::Vertex line[] = {
       sf::Vertex(
         sf::Vector2f(position_.x + i*csize_, position_.y)),
@@ -95,7 +95,7 @@ void Field::draw(sf::RenderWindow* window) const
     window->draw(line, 2, sf::Lines);
   }
 
-  for (size_t i{0}; i <= size_.y; ++i) {
+  for (size_t i {0}; i <= size_.y; ++i) {
     sf::Vertex line[] = {
       sf::Vertex(
         sf::Vector2f(position_.x, position_.y + i*csize_)),

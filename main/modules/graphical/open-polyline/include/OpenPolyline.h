@@ -8,14 +8,15 @@
 
 #include "Line.h"
 
-class OpenPolyline
-{
+class OpenPolyline {
 public:
   OpenPolyline(sf::Color color, float thickness);
 
-  OpenPolyline(std::initializer_list<sf::Vector2f> nodes,
-               sf::Color color,
-               float thickness);
+  OpenPolyline(
+    std::initializer_list<sf::Vector2f> nodes,
+    sf::Color color,
+    float thickness
+  );
 
   virtual void Add(const sf::Vector2f& node);
   void Clear();

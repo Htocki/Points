@@ -6,10 +6,12 @@
 class Line
 {
 public:
-  Line(const sf::Vector2f& begin,
-       const sf::Vector2f& end,
-       sf::Color color,
-       float thickness);
+  Line(
+    const sf::Vector2f& begin,
+    const sf::Vector2f& end,
+    sf::Color color,
+    float thickness
+  );
 
   void Draw(sf::RenderWindow* window) const;
 

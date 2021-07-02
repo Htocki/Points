@@ -3,8 +3,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/String.hpp>
 
-class Player
-{
+class Player {
 public:
   Player(const sf::String& name, sf::Color color, bool active);
 

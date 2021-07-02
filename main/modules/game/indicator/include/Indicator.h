@@ -5,8 +5,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 
-class Indicator
-{
+class Indicator {
 public:
   Indicator(const sf::Vector2f& position,
             const sf::Vector2f& size,
