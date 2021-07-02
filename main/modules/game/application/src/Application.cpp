@@ -1,5 +1,7 @@
 #include "Application.h"
 
+#include <sstream>
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -23,16 +25,36 @@ sf::ConvexShape MakeConvex(
   return convex;
 }
 
-Application::Application()
-  : window_ {sf::VideoMode{800, 600}, sf::String{L"Точки"}, sf::Style::Default, sf::ContextSettings{0, 0, 8}}
-  , field_ {sf::Vector2f{100.f, 90.f}, sf::Vector2f{30.f, 20.f}, 20, sf::Color::Black, 5}
-  , player1_ {sf::String{L"first"}, sf::Color::Red, true}
-  , player2_ {sf::String{L"second"}, sf::Color::Blue, false}
-  , player1_indicator_ {sf::Vector2f{151, 40}, sf::Vector2f{90, 20}, sf::Color::Red, true}
-  , player2_indicator_ {sf::Vector2f{557, 40}, sf::Vector2f{90, 20}, sf::Color::Blue, false}
-  , polyline_ {37, 4}
-  , step_ {true}
+sf::String toString(sf::Uint64 integer)
 {
+    std::ostringstream os;
+    os << integer;
+    return os.str();
+}
+
+Application::Application()
+  : field_ {sf::Vector2f{100.f, 90.f}, sf::Vector2f{30.f, 20.f}, 20, sf::Color::Black, 5}
+  , indicator1_ {sf::Vector2f{220, 40}, sf::Vector2f{20, 20}, sf::Color::Red, true}
+  , indicator2_ {sf::Vector2f{560, 40}, sf::Vector2f{20, 20}, sf::Color::Blue, false}
+  , player1_ {sf::String{L"Игрок А"}, sf::Color::Red, true}
+  , player2_ {sf::String{L"Игрок Б"}, sf::Color::Blue, false}, polyline_ {37, 4}
+  , step_ {true}
+  , window_ {sf::VideoMode{800, 600}, sf::String{L"ТОЧКИ"}, sf::Style::Default, sf::ContextSettings{0, 0, 8}}
+{
+  score1_.setFont(Assets::Instance().GetPixelFont7());
+  score1_.setPosition(sf::Vector2f {100, 35});
+  score1_.setString(player1_.GetName() + L": " + toString(player1_.GetScore()));
+  score1_.setCharacterSize(20);
+  score1_.setFillColor(sf::Color::Red);
+  score1_.setStyle(sf::Text::Bold);
+  
+  score2_.setFont(Assets::Instance().GetPixelFont7());
+  score2_.setPosition(sf::Vector2f {600, 35});
+  score2_.setString(player2_.GetName() + L": " + toString(player2_.GetScore()));
+  score2_.setCharacterSize(20);
+  score2_.setFillColor(sf::Color::Blue);
+  score2_.setStyle(sf::Text::Regular);
+  
   window_.setFramerateLimit(70);
 }
 
@@ -58,8 +80,10 @@ void Application::HandleEvent(const sf::Event& event) {
       sf::Color color {player1_.GetColor()};
       if (event.mouseButton.button == sf::Mouse::Left) {
         if (field_.setNodeColor(coords, color)) {
-          player1_indicator_.Disable();
-          player2_indicator_.Enable();
+          indicator1_.Disable();
+          indicator2_.Enable();
+          score1_.setStyle(sf::Text::Regular);
+          score2_.setStyle(sf::Text::Bold);
           player1_.Deactivate();
           player2_.Activate();
           polyline_.Clear();
@@ -71,7 +95,8 @@ void Application::HandleEvent(const sf::Event& event) {
         if (field_.correctPosition(coords, color)) {
           polyline_.AddPointPosition(coords, color);
           if (polyline_.IsClosed()) {
-            convexes_.push_back(MakeConvex(polyline_, color, polyline_.GetThickness()));
+            convexes_.push_back(
+              MakeConvex(polyline_, color, polyline_.GetThickness()));
             polyline_.Clear();
           }
         } else {
@@ -84,8 +109,10 @@ void Application::HandleEvent(const sf::Event& event) {
       sf::Color color {player2_.GetColor()};
       if (event.mouseButton.button == sf::Mouse::Left) {
         if (field_.setNodeColor(coords, color)) {
-          player1_indicator_.Enable();
-          player2_indicator_.Disable();
+          indicator1_.Enable();
+          indicator2_.Disable();
+          score1_.setStyle(sf::Text::Bold);
+          score2_.setStyle(sf::Text::Regular);
           player1_.Activate();
           player2_.Deactivate();
           polyline_.Clear();
@@ -97,7 +124,8 @@ void Application::HandleEvent(const sf::Event& event) {
         if (field_.correctPosition(coords, color)) {
           polyline_.AddPointPosition(coords, color);
           if (polyline_.IsClosed()) {
-            convexes_.push_back(MakeConvex(polyline_, color, polyline_.GetThickness()));
+            convexes_.push_back(
+              MakeConvex(polyline_, color, polyline_.GetThickness()));
             polyline_.Clear();
           }
         } else {
@@ -115,7 +143,9 @@ void Application::Draw() {
     window_.draw(convex);
   }
   polyline_.Draw(&window_);
-  player1_indicator_.Draw(&window_);
-  player2_indicator_.Draw(&window_);
+  indicator1_.Draw(&window_);
+  indicator2_.Draw(&window_);
+  window_.draw(score1_);
+  window_.draw(score2_);
   window_.display();
 }

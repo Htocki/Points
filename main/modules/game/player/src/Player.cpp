@@ -1,21 +1,27 @@
 #include "Player.h"
 
-Player::Player(const sf::String& name, sf::Color color, bool active)
-  : name_ {name}
+Player::Player(const sf::String& name, sf::Color color, bool state)
+  : state_ {state}
   , color_ {color}
-  , active_ {active}
-{}
+  , name_ {name}
+{
+  score_ = 0;
+}
 
 void Player::Activate() {
-  active_ = true;
+  state_ = true;
 }
 
 void Player::Deactivate() {
-  active_ = false;
+  state_ = false;
 }
 
-bool Player::IsActive() const {
-  return active_;
+void Player::IncreaseScoreBy(sf::Uint64 value) {
+  score_ += value;
+}
+
+void Player::SetScoreToZero() {
+  score_ = 0;
 }
 
 sf::Color Player::GetColor() const {
@@ -24,4 +30,12 @@ sf::Color Player::GetColor() const {
 
 const sf::String& Player::GetName() const {
   return name_;
+}
+
+sf::Uint64 Player::GetScore() const {
+  return score_;
+}
+
+bool Player::IsActive() const {
+  return state_;
 }
