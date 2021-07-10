@@ -12,58 +12,56 @@ Line::Line(
   float thickness
 )
   : begin_ {begin}
-  , end_ {end}
   , color_ {color}
+  , end_ {end}
   , thickness_ {thickness}
 {
   SetVertexPositions(begin, end);
 }
 
-void Line::Draw(sf::RenderWindow* window) const {
-  sf::Vertex vertices[4];
-
-  for (unsigned int i {0}; i < 4; ++i) {
-    vertices[i].position = { vertices_[i].x, vertices_[i].y };
-  }
-
-  for (unsigned int i {0}; i < 4; ++i) {
-    vertices[i].color = { color_ };
-  }
-  window->draw(vertices, thickness_, sf::Quads);
-}
-
-void Line::SetBegin(const sf::Vector2f& begin) {
+void Line::ToChangeBegin(const sf::Vector2f& begin) {
   SetVertexPositions(begin, end_);
   begin_ = begin;
 }
 
-void Line::SetEnd(const sf::Vector2f& end) {
+void Line::ToChangeEnd(const sf::Vector2f& end) {
   SetVertexPositions(begin_, end);
   end_ = end;
 }
 
-void Line::SetColor(sf::Color color) {
-  color_ = color;
-}
-
-void Line::SetThickness(float thickness) {
+void Line::ToChangeThickness(float thickness) {
   thickness_ = thickness;
 }
 
-const sf::Vector2f& Line::GetBegin() const {
+void Line::ToRepaint(sf::Color color) {
+  color_ = color;
+}
+
+const sf::Vector2f& Line::Begin() const {
   return begin_;
 }
 
-const sf::Vector2f& Line::GetEnd() const {
-  return end_;
-}
-
-sf::Color Line::GetColor() const {
+sf::Color Line::Color() const {
   return color_;
 }
 
-float Line::GetThickness() const {
+const sf::Vector2f& Line::End() const {
+  return end_;
+}
+
+float Line::Thickness() const {
   return thickness_;
+}
+
+void Line::ToDraw(sf::RenderWindow* window) const {
+  sf::Vertex vertices[4];
+  for (unsigned int i {0}; i < 4; ++i) {
+    vertices[i].position = sf::Vector2f {vertices_[i].x, vertices_[i].y};
+  }
+  for (unsigned int i {0}; i < 4; ++i) {
+    vertices[i].color = sf::Color {color_};
+  }
+  window->draw(vertices, thickness_, sf::Quads);
 }
 
 void Line::SetVertexPositions(const sf::Vector2f& begin, const sf::Vector2f& end) {

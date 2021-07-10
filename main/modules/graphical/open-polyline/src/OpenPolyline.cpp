@@ -16,11 +16,11 @@ OpenPolyline::OpenPolyline(
   , thickness_ {thickness}
 {
   for (const auto& node : nodes) {
-    Add(node);
+    ToAdd(node);
   }
 }
 
-void OpenPolyline::Add(const sf::Vector2f& node) {
+void OpenPolyline::ToAdd(const sf::Vector2f& node) {
   if (nodes_.size() < 1) {
     nodes_.push_back(node);
   } else {
@@ -36,21 +36,21 @@ void OpenPolyline::Add(const sf::Vector2f& node) {
   }
 }
 
-void OpenPolyline::Clear() {
+void OpenPolyline::ToClear() {
   lines_.clear();
   nodes_.clear();
 }
 
-void OpenPolyline::Remove(const sf::Vector2f& node) {
+void OpenPolyline::ToRemove(const sf::Vector2f& node) {
   const auto new_end {std::remove(std::begin(nodes_), std::end(nodes_), node)};
   nodes_.erase(new_end, std::end(nodes_));
 }
 
-void OpenPolyline::SetColor(sf::Color color) {
+void OpenPolyline::ToRepaint(sf::Color color) {
   color_ = color;
 }
 
-void OpenPolyline::SetThickness(float thickness) {
+void OpenPolyline::ToChangeThickness(float thickness) {
   thickness_ = thickness;
 }
 
@@ -58,27 +58,27 @@ const sf::Vector2f& OpenPolyline::At(unsigned int index) const {
   return nodes_.at(index);
 }
 
-void OpenPolyline::Draw(sf::RenderWindow* window) const {
-  for (auto& line : lines_) {
-    line.Draw(window);
-  }
-}
-
-sf::Color OpenPolyline::GetColor() const {
+sf::Color OpenPolyline::Color() const {
   return color_;
 }
 
-float OpenPolyline::GetThickness() const {
-  return thickness_;
+
+bool OpenPolyline::Empted() const {
+  if (nodes_.size() > 0) {
+    return false;
+  }
+  return true;
 }
 
 unsigned int OpenPolyline::NodesCount() const {
   return nodes_.size();
 }
 
-bool OpenPolyline::IsEmpty() const {
-  if (nodes_.size() > 0) {
-    return false;
+float OpenPolyline::Thickness() const {
+  return thickness_;
+}
+void OpenPolyline::ToDraw(sf::RenderWindow* window) const {
+  for (auto& line : lines_) {
+    line.ToDraw(window);
   }
-  return true;
 }

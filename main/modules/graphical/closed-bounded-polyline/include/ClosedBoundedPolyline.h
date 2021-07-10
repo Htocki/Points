@@ -12,23 +12,21 @@ class ClosedBoundedPolyline {
 public:
   ClosedBoundedPolyline(unsigned int bounding_radius, float thickness);
 
-  void Draw(sf::RenderWindow* window) const;
+  void AddNode(const sf::Vector2f& node, sf::Color color);
+  void ToClear();
 
-  void AddPointPosition(const sf::Vector2f& position, sf::Color color);
   const sf::Vector2f& At(unsigned int index) const;
-  void Clear();
-
-  bool IsClosed() const;
-  bool IsEmpty() const;
-
-  unsigned int GetBoundingRadius() const;
-  sf::Color GetColor() const;
-  unsigned int GetPointCount() const;
-  float GetThickness() const;
+  unsigned int        BoundingRadius() const;
+  bool                Closed() const;
+  sf::Color           Color() const;
+  bool                Empted() const;
+  unsigned int        NodesCount() const;
+  float               Thickness() const;
+  void                ToDraw(sf::RenderWindow* window) const;
 
 private:
-  std::vector<Line> lines_;
-  std::vector<sf::Vector2f> positions_;
-  sf::CircleShape bounding_area_;
-  float thickness_;
+  sf::CircleShape           bounding_area_;
+  std::vector<Line>         lines_;
+  std::vector<sf::Vector2f> nodes_;
+  float                     thickness_;
 };

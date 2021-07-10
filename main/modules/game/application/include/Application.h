@@ -12,6 +12,7 @@
 #include "Field.h"
 #include "Indicator.h"
 #include "Player.h"
+#include "BoundedPolygon.h"
 
 class Application {
 public:
@@ -22,15 +23,15 @@ private:
   void HandleEvent(const sf::Event& event);
   void Draw();
 
-  std::vector<sf::ConvexShape> convexes_;
   Field field_;
   Indicator indicator1_;
   Indicator indicator2_;
   Player player1_;
   Player player2_;
-  ClosedBoundedPolyline polyline_;
+  BoundedPolygon polygon_;
   sf::Text score1_;
   sf::Text score2_;
   bool step_;
+  std::vector<BoundedPolygon> polygons_;
   sf::RenderWindow window_;
 };

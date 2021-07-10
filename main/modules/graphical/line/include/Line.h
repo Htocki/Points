@@ -3,8 +3,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class Line
-{
+class Line {
 public:
   Line(
     const sf::Vector2f& begin,
@@ -13,24 +12,23 @@ public:
     float thickness
   );
 
-  void Draw(sf::RenderWindow* window) const;
+  void ToChangeBegin(const sf::Vector2f& begin);
+  void ToChangeEnd(const sf::Vector2f& end);
+  void ToChangeThickness(float thickness);
+  void ToRepaint(sf::Color color);
 
-  void SetBegin(const sf::Vector2f& begin);
-  void SetColor(sf::Color color);
-  void SetEnd(const sf::Vector2f& end);
-  void SetThickness(float thickness);
-
-  const sf::Vector2f& GetBegin() const;
-  sf::Color GetColor() const;
-  const sf::Vector2f& GetEnd() const;
-  float GetThickness() const;
+  const sf::Vector2f& Begin() const;
+  sf::Color           Color() const;
+  const sf::Vector2f& End() const;
+  float               Thickness() const;
+  void                ToDraw(sf::RenderWindow* window) const;
 
 private:
   void SetVertexPositions(const sf::Vector2f& begin, const sf::Vector2f& end);
 
-  sf::Vector2f begin_;
-  sf::Vector2f end_;
-  sf::Vector2f vertices_[4];
-  sf::Color color_;
-  float thickness_;
+  sf::Vector2f  begin_;
+  sf::Color     color_;
+  sf::Vector2f  end_;
+  float         thickness_;
+  sf::Vector2f  vertices_[4];
 };

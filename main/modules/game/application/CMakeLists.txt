@@ -28,10 +28,11 @@ target_include_directories (${PROJECT_NAME}
 target_link_libraries (${PROJECT_NAME} 
   PUBLIC
     assets
-    closed-bounded-polyline
+    bounded-polygon
     field
     indicator
     player
+
     sfml-graphics
     sfml-system
     sfml-window

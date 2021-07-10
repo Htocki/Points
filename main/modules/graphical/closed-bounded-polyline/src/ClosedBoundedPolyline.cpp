@@ -9,81 +9,81 @@ ClosedBoundedPolyline::ClosedBoundedPolyline(
   bounding_area_.setRadius(bounding_radius);
 }
 
-void ClosedBoundedPolyline::Draw(sf::RenderWindow* window) const {
-  for (auto& line : lines_) {
-    line.Draw(window);
-  }
-}
-
-const sf::Vector2f& ClosedBoundedPolyline::At(unsigned int index) const {
-  return positions_.at(index);
-}
-
-void ClosedBoundedPolyline::Clear() {
-  lines_.clear();
-  positions_.clear();
-}
-
-void ClosedBoundedPolyline::AddPointPosition(
-  const sf::Vector2f& position,
+void ClosedBoundedPolyline::AddNode(
+  const sf::Vector2f& node,
   sf::Color color
 ) {
-  if (positions_.size() < 1) {
-    positions_.push_back(position);
+  if (nodes_.size() < 1) {
+    nodes_.push_back(node);
     bounding_area_.setPosition(
-      position.x - bounding_area_.getRadius(),
-      position.y - bounding_area_.getRadius()
+      node.x - bounding_area_.getRadius(),
+      node.y - bounding_area_.getRadius()
     );
   } else {
-    if (bounding_area_.getGlobalBounds().contains(position.x, position.y)) {
-      positions_.push_back(position);
+    if (bounding_area_.getGlobalBounds().contains(node.x, node.y)) {
+      nodes_.push_back(node);
       bounding_area_.setPosition(
-        position.x - bounding_area_.getRadius(),
-        position.y - bounding_area_.getRadius()
+        node.x - bounding_area_.getRadius(),
+        node.y - bounding_area_.getRadius()
       );
       lines_.push_back(
         Line {
-          sf::Vector2f {positions_.at(positions_.size() - 2)},
-          sf::Vector2f {positions_.at(positions_.size() - 1)},
+          sf::Vector2f {nodes_.at(nodes_.size() - 2)},
+          sf::Vector2f {nodes_.at(nodes_.size() - 1)},
           color,
           thickness_
         }
       );
     } else {
-      positions_.clear();
+      nodes_.clear();
       lines_.clear();
     }
   }
 }
 
-bool ClosedBoundedPolyline::IsClosed() const {
-  if (positions_.size() > 2) {
-    if (positions_.at(0) == positions_.at(positions_.size() - 1)) {
+void ClosedBoundedPolyline::ToClear() {
+  lines_.clear();
+  nodes_.clear();
+}
+
+const sf::Vector2f& ClosedBoundedPolyline::At(unsigned int index) const {
+  return nodes_.at(index);
+}
+
+unsigned int ClosedBoundedPolyline::BoundingRadius() const {
+  return bounding_area_.getRadius();
+}
+
+bool ClosedBoundedPolyline::Closed() const {
+  if (nodes_.size() > 2) {
+    if (nodes_.at(0) == nodes_.at(nodes_.size() - 1)) {
       return true;
     }
   }
   return false;
 }
 
-bool ClosedBoundedPolyline::IsEmpty() const {
-  if (positions_.size() > 0) {
+sf::Color ClosedBoundedPolyline::Color() const {
+  return lines_[0].Color();
+}
+
+bool ClosedBoundedPolyline::Empted() const {
+  if (nodes_.size() > 0) {
     return false;
   }
   return true;
 }
 
-unsigned int ClosedBoundedPolyline::GetPointCount() const {
-  return positions_.size();
+unsigned int ClosedBoundedPolyline::NodesCount() const {
+  return nodes_.size();
 }
 
-sf::Color ClosedBoundedPolyline::GetColor() const {
-  return lines_[0].GetColor();
-}
-
-float ClosedBoundedPolyline::GetThickness() const {
+float ClosedBoundedPolyline::Thickness() const {
   return thickness_;
 }
 
-unsigned int ClosedBoundedPolyline::GetBoundingRadius() const {
-  return bounding_area_.getRadius();
+void ClosedBoundedPolyline::ToDraw(sf::RenderWindow* window) const {
+  for (auto& line : lines_) {
+    line.ToDraw(window);
+  }
 }

@@ -14,19 +14,19 @@ ClosedPolyline::ClosedPolyline(
   : OpenPolyline {nodes, color, thickness}
 {
   if (NodesCount() > 2) {
-    OpenPolyline::Add(At(0));
+    OpenPolyline::ToAdd(At(0));
   }
 }
 
-void ClosedPolyline::Add(const sf::Vector2f& node) {
+void ClosedPolyline::ToAdd(const sf::Vector2f& node) {
   if (NodesCount() == 2) {
-    OpenPolyline::Add(node);
-    OpenPolyline::Add(At(0));
+    OpenPolyline::ToAdd(node);
+    OpenPolyline::ToAdd(At(0));
   } else if (NodesCount() > 2) {
-    OpenPolyline::Remove(At(NodesCount() - 1));
-    OpenPolyline::Add(node);
-    OpenPolyline::Add(At(0));
+    OpenPolyline::ToRemove(At(NodesCount() - 1));
+    OpenPolyline::ToAdd(node);
+    OpenPolyline::ToAdd(At(0));
   } else {
-    OpenPolyline::Add(node);
+    OpenPolyline::ToAdd(node);
   }
 }

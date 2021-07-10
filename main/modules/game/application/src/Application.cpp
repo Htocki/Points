@@ -8,28 +8,10 @@
 
 #include "Assets.h"
 
-sf::ConvexShape MakeConvex(
-  const ClosedBoundedPolyline& polyline,
-  sf::Color color,
-  float thickness
-) {
-  sf::ConvexShape convex;
-  convex.setOutlineColor(color);
-  convex.setOutlineThickness(thickness);
-  color.a = 125;
-  convex.setFillColor(color);
-  convex.setPointCount(polyline.GetPointCount());
-  for (unsigned int i {0}; i < polyline.GetPointCount(); ++i) {
-    convex.setPoint(i, sf::Vector2f(polyline.At(i).x, polyline.At(i).y));
-  }
-  return convex;
-}
-
-sf::String toString(sf::Uint64 integer)
-{
-    std::ostringstream os;
-    os << integer;
-    return os.str();
+sf::String toString(sf::Uint64 integer) {
+  std::ostringstream os;
+  os << integer;
+  return os.str();
 }
 
 Application::Application()
@@ -37,23 +19,22 @@ Application::Application()
   , indicator1_ {sf::Vector2f{220, 40}, sf::Vector2f{20, 20}, sf::Color::Red, true}
   , indicator2_ {sf::Vector2f{560, 40}, sf::Vector2f{20, 20}, sf::Color::Blue, false}
   , player1_ {sf::String{L"Игрок А"}, sf::Color::Red, true}
-  , player2_ {sf::String{L"Игрок Б"}, sf::Color::Blue, false}, polyline_ {37, 4}
+  , player2_ {sf::String{L"Игрок Б"}, sf::Color::Blue, false}
+  , polygon_ {37, 4}
   , step_ {true}
-  , window_ {sf::VideoMode{800, 600}, sf::String{L"ТОЧКИ"}, sf::Style::Default, sf::ContextSettings{0, 0, 8}}
+  , window_ {sf::VideoMode{800, 600}, sf::String{L"ТО_oЧКИ"}, sf::Style::Default, sf::ContextSettings {0, 0, 8}}
 {
   score1_.setFont(Assets::Instance().GetPixelFont7());
   score1_.setPosition(sf::Vector2f {100, 35});
   score1_.setString(player1_.GetName() + L": " + toString(player1_.GetScore()));
   score1_.setCharacterSize(20);
   score1_.setFillColor(sf::Color::Red);
-  score1_.setStyle(sf::Text::Bold);
   
   score2_.setFont(Assets::Instance().GetPixelFont7());
   score2_.setPosition(sf::Vector2f {600, 35});
   score2_.setString(player2_.GetName() + L": " + toString(player2_.GetScore()));
   score2_.setCharacterSize(20);
   score2_.setFillColor(sf::Color::Blue);
-  score2_.setStyle(sf::Text::Regular);
   
   window_.setFramerateLimit(70);
 }
@@ -82,25 +63,22 @@ void Application::HandleEvent(const sf::Event& event) {
         if (field_.setNodeColor(coords, color)) {
           indicator1_.Disable();
           indicator2_.Enable();
-          score1_.setStyle(sf::Text::Regular);
-          score2_.setStyle(sf::Text::Bold);
           player1_.Deactivate();
           player2_.Activate();
-          polyline_.Clear();
+          polygon_.ToClear();
           step_ = false;
         }
       }
 
       if (event.mouseButton.button == sf::Mouse::Right) {
         if (field_.correctPosition(coords, color)) {
-          polyline_.AddPointPosition(coords, color);
-          if (polyline_.IsClosed()) {
-            convexes_.push_back(
-              MakeConvex(polyline_, color, polyline_.GetThickness()));
-            polyline_.Clear();
+          polygon_.AddNode(coords, color);
+          if (polygon_.Closed()) {
+            polygons_.push_back(polygon_);
+            polygon_.ToClear();
           }
         } else {
-          polyline_.Clear();
+          polygon_.ToClear();
         }
       }
     }
@@ -111,25 +89,22 @@ void Application::HandleEvent(const sf::Event& event) {
         if (field_.setNodeColor(coords, color)) {
           indicator1_.Enable();
           indicator2_.Disable();
-          score1_.setStyle(sf::Text::Bold);
-          score2_.setStyle(sf::Text::Regular);
           player1_.Activate();
           player2_.Deactivate();
-          polyline_.Clear();
+          polygon_.ToClear();
           step_ = true;
         }
       }
 
       if (event.mouseButton.button == sf::Mouse::Right) {
         if (field_.correctPosition(coords, color)) {
-          polyline_.AddPointPosition(coords, color);
-          if (polyline_.IsClosed()) {
-            convexes_.push_back(
-              MakeConvex(polyline_, color, polyline_.GetThickness()));
-            polyline_.Clear();
+          polygon_.AddNode(coords, color);
+          if (polygon_.Closed()) {
+            polygons_.push_back(polygon_);
+            polygon_.ToClear();
           }
         } else {
-          polyline_.Clear();
+          polygon_.ToClear();
         }
       }
     }
@@ -139,10 +114,8 @@ void Application::HandleEvent(const sf::Event& event) {
 void Application::Draw() {
   window_.clear(sf::Color::White);
   field_.draw(&window_);
-  for (const auto& convex : convexes_) {
-    window_.draw(convex);
-  }
-  polyline_.Draw(&window_);
+  for (auto polygon : polygons_) { polygon.ToDraw(&window_); }
+  polygon_.ToDraw(&window_);
   indicator1_.Draw(&window_);
   indicator2_.Draw(&window_);
   window_.draw(score1_);
